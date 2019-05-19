@@ -1,6 +1,8 @@
 import React from 'react'
 import { Map as LeafletMap, TileLayer, Marker, Popup} from 'react-leaflet';
 import Routing from './ReactLeaflet/Routing'
+import 'leaflet'
+import * as api from './Api'
 class GrobMap extends React.Component {
   constructor(props) {
     super(props);
@@ -8,7 +10,10 @@ class GrobMap extends React.Component {
       address: null,
       fromLocation : null,
       toLocation : null,
-      isMapInit: false
+      isMapInit: false,
+      route:null,
+      distance:0,
+      time:0,
     }
   }
   componentWillMount(){
@@ -26,6 +31,11 @@ class GrobMap extends React.Component {
       fromLocation:[pos.coords.latitude,pos.coords.longitude]
        });
   });
+  
+ 
+}
+componentDidUpdate(){
+  console.log(this.state);
 }
 saveMap = (map) => {
   this.map = map;
@@ -37,7 +47,6 @@ saveMap = (map) => {
     if(this.state.fromLocation) var fromLocation = this.state.fromLocation;
     const toLocation = this.state.toLocation;
     const isMapInit = this.state.isMapInit;
-    console.log(this.map);
     return (
     <LeafletMap
         ref={this.saveMap}
@@ -58,7 +67,8 @@ saveMap = (map) => {
           <Popup>
             Popup for any custom information.
           </Popup>
-        </Marker> && isMapInit && <Routing from={fromLocation} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
+  </Marker> }
+  {toLocation && isMapInit && <Routing setDisTime={(dis,time)=>this.setState({distance:dis,time:time})} route={this.state.route} setRoute={(route)=>this.setState({route : route})} from={fromLocation} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
       }
       </LeafletMap>
     );

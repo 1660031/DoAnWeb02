@@ -9,3 +9,8 @@ export function getAddress(lat,lon,setAddress) {
         console.log(error);
     });
 }
+export function callServer(from,to,distance,time) {
+   console.log(from,to,distance,time);
+   console.log("oke");
+
+}
