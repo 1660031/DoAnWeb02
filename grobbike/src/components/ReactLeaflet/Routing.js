@@ -6,6 +6,7 @@ class RoutingMachine extends MapLayer {
   createLeafletElement() {
     const setDisTime=this.props.setDisTime;
     const {map, from,to,route } = this.props;
+    console.log(to);
     if (route) route.remove(map);
     let leafletElement = L.Routing.control({
       waypoints: [

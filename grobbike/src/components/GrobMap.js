@@ -7,46 +7,34 @@ class GrobMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      address: null,
-      fromLocation : null,
-      toLocation : null,
       isMapInit: false,
-      route:null,
       distance:0,
       time:0,
+      route:null,
+
     }
-  }
-  componentWillMount(){
+    this.setRoute = this.setRoute.bind(this);
 
   }
+  setRoute(route){
+    this.setState({route})
+}
   addToMarker = (e) => {
-    var toLocation=this.state;
-    if(toLocation) this.setState({toLocation:null});
+    var toLocation=this.props;
+    if(toLocation) this.props.setToLocation(null);
     toLocation = e.latlng;
-    this.setState({toLocation :toLocation})
+    api.getAddress(e.latlng["lat"],e.latlng["lng"],this.props.setToAddress);
+    this.props.setToLocation(toLocation);
   }
-  componentDidMount() {
-    navigator.geolocation.getCurrentPosition((pos)=>{
-      this.setState({
-      fromLocation:[pos.coords.latitude,pos.coords.longitude]
-       });
-  });
-  
- 
-}
-componentDidUpdate(){
-  console.log(this.state);
-}
+
 saveMap = (map) => {
   this.map = map;
-  this.setState({
-      isMapInit: true
-  })
+  this.setState({isMapInit:true});
 }
   render() {
-    if(this.state.fromLocation) var fromLocation = this.state.fromLocation;
-    const toLocation = this.state.toLocation;
+    const {toLocation,fromLocation} = this.props;
     const isMapInit = this.state.isMapInit;
+    console.log("Grobb");
     return (
     <LeafletMap
         ref={this.saveMap}
@@ -68,7 +56,7 @@ saveMap = (map) => {
             Popup for any custom information.
           </Popup>
   </Marker> }
-  {toLocation && isMapInit && <Routing setDisTime={(dis,time)=>this.setState({distance:dis,time:time})} route={this.state.route} setRoute={(route)=>this.setState({route : route})} from={fromLocation} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
+  {toLocation && isMapInit && <Routing setDisTime={(dis,time)=>this.setState({distance:dis,time:time})} route={this.state.route} setRoute={this.setRoute} from={fromLocation} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
       }
       </LeafletMap>
     );
