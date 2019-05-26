@@ -35,8 +35,8 @@ setSelectedAddressIndex(selectedAddressIndex) {
     render() {
         const address=this.refs.address;
         const listSearch=this.state.listSearch;
-        const {fromLocation} = this.props;
-        const toLocation =this.props.toLocation;
+        const {fromLocation,toLocation} = this.props;
+        console.log(toLocation);
         return (
           <div style={{padding:"20px 20px 10px 20px",background:"black"}}>
             <form action="#" method="get">
@@ -57,11 +57,12 @@ setSelectedAddressIndex(selectedAddressIndex) {
                                                     color:this.selectedAddressColor(key)}}
            onClick={()=>{this.setSelectedAddressIndex(key);
                         this.setToLocation(value);
+                        console.log(value);
            }} 
            key={key}>{value.display_name}</li>)
          }
         </ul>}
-        <a href="#" className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#completeCharge">Đặt xe</a>
+        <a href="#"onClick={()=>{console.log(toLocation);}}  className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#completeCharge">Đặt xe</a>
 <Modals/>
            </div>
         );
