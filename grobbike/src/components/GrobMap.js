@@ -34,7 +34,7 @@ saveMap = (map) => {
   render() {
     const {toLocation,fromLocation} = this.props;
     const isMapInit = this.state.isMapInit;
-    console.log("Grobb");
+    console.log(toLocation);
     return (
     <LeafletMap
         ref={this.saveMap}
@@ -50,12 +50,11 @@ saveMap = (map) => {
             Popup for any custom information.
           </Popup>
         </Marker>
-        {toLocation && 
-        <Marker position={toLocation}>
+        {toLocation && <Marker position={toLocation}>
           <Popup>
             Popup for any custom information.
           </Popup>
-  </Marker> }
+  </Marker>}
   {toLocation && isMapInit && <Routing setDisTime={(dis,time)=>this.setState({distance:dis,time:time})} route={this.state.route} setRoute={this.setRoute} from={fromLocation} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
       }
       </LeafletMap>

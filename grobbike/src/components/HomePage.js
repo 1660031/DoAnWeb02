@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from './Header';
 import Form from './Form';
 import Footer from './Footer';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import DriverContent from './DriverContent';
 import GrobMap from './GrobMap';
 import  "./CSS/style.css";
@@ -31,20 +32,24 @@ class HomePage extends Component {
     componentWillMount() {
         navigator.geolocation.getCurrentPosition((pos)=>{
           this.setState({
-          fromLocation:[pos.coords.latitude,pos.coords.longitude]
+            toLocation:[pos.coords.latitude,pos.coords.longitude],
+            fromLocation:[pos.coords.latitude,pos.coords.longitude]
            });
       });
     }
     render() {   
         return (
+          <Router>
             <body style={{overflowX :"hidden"}} data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
             <div className="site-wrap"  id="home-section">
             <Header/>
-            <Form toLocation={this.state.toLocation}  fromLocation={this.state.fromLocation} setRoute={this.setRoute} setToLocation={this.setToLocation} toAddress={this.state.toAddress} />
+            <Route exact path="/driver/" render={props=><DriverContent fromLocation={this.state.fromLocation} setRoute={this.setRoute} setToLocation={this.setToLocation} toAddress={this.state.toAddress}/>} />
+            <Route exact path="/" render={props=><Form toLocation={this.state.toLocation}  fromLocation={this.state.fromLocation} setRoute={this.setRoute} setToLocation={this.setToLocation} toAddress={this.state.toAddress}/>} />
             <GrobMap setToAddress={this.setToAddress} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/>
             <Footer/>
             </div>
             </body>
+            </Router>
         );
     }
 }

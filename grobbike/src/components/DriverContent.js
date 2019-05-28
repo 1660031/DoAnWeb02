@@ -1,7 +1,29 @@
 import React, { Component } from 'react';
+import io from 'socket.io-client'
 
 class DriverContent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    } 
+    this.sendLocation = this.sendLocation.bind(this);
+    this.socket =io('http://localhost:8080/')
+    this.socket.on('server_send_location',(location)=>{
+      var toLocation = this.props.toLocation;
+    if(toLocation) this.props.setToLocation(null);
+    else this.props.setToLocation(location[0].location);
+    })
+  }
+  sendLocation(){
+    const fromLocation=this.props.fromLocation;
+    const info={id :"driver001" ,location :fromLocation};
+    console.log(fromLocation);
+    this.socket.emit('driver_send_location',info);
+    setInterval(()=>this.socket.emit('driver_update_location',info),3000);
+  }
     render() {
+      const {fromLocation} = this.props;
         return (
             <div className="site-section-cover overlay img-bg-section" style={{backgroundImage: 'url("")'}}>
   <div className="container">
@@ -11,7 +33,7 @@ class DriverContent extends Component {
           <div className="form-group row">
             <div className="col-lg-6">
               <div className="toggle-button align-items-center d-flex">
-                <a href="#" className="btn btn-primary py-3 px-5">Bắt đầu nhận cước từ khách</a>
+                <a onClick={()=>this.sendLocation(fromLocation)} href="#" className="btn btn-primary py-3 px-5">Bắt đầu nhận cước từ khách</a>
                 <a href="#" className="site-menu-toggle p-5 js-menu-toggle text-black d-inline-block d-lg-none d-flex">
                   <span className="icon-menu h3 m-0" />
                 </a>

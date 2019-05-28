@@ -1,19 +1,35 @@
 import React, { Component } from 'react';
-import Modals from './Modals';
+import Modals from './Modals'
+import io from 'socket.io-client'
 import * as api from './Api'
-import Routing from './ReactLeaflet/Routing'
-
 class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
       listSearch:null,
       selectedAddressIndex : null,
-    }
+    } 
+    this.sendLocation = this.sendLocation.bind(this);
+    this.socket =io('http://localhost:8080/')
     this.setListSearch = this.setListSearch.bind(this);
     this.selectedAddressBackground = this.selectedAddressBackground.bind(this);
     this.selectedAddressColor = this.selectedAddressColor.bind(this);
     this.setSelectedAddressIndex = this.setSelectedAddressIndex.bind(this);
+    this.socket.on('server_send_location',(location)=>{
+      var toLocation = this.props.toLocation;
+    if(toLocation) this.props.setToLocation(null);
+    else this.props.setToLocation(location[0].location);
+    })
+    this.socket.on('send_driverLocation_to_guest001',(location)=>{
+      console.log(location);
+  })
+  }
+  
+  sendLocation(){
+    const toLocation=this.props.toLocation;
+    const info={id:"001", toLocation:toLocation};
+    console.log(toLocation);
+    this.socket.emit('guest_send_location',info);
   }
   selectedAddressBackground(key){
       return ((key===this.state.selectedAddressIndex)? 'black' : 'white')
@@ -27,16 +43,18 @@ setSelectedAddressIndex(selectedAddressIndex) {
   setListSearch(listSearch) {
     this.setState({listSearch});
   }
-  setToLocation(value){
+  setToLocation(location){
     var toLocation = this.props.toLocation;
     if(toLocation) this.props.setToLocation(null);
-    else this.props.setToLocation({lat:Number(value.lat),lng:Number(value.lon)})
+    else this.props.setToLocation(location)
   }
     render() {
         const address=this.refs.address;
         const listSearch=this.state.listSearch;
-        const {fromLocation} = this.props;
-        const toLocation =this.props.toLocation;
+        const {fromLocation,toLocation} = this.props;
+        console.log(fromLocation);
+        console.log(toLocation);
+
         return (
           <div style={{padding:"20px 20px 10px 20px",background:"black"}}>
             <form action="#" method="get">
@@ -55,13 +73,15 @@ setSelectedAddressIndex(selectedAddressIndex) {
          { 
            listSearch.map((value,key)=><li style = {{background : this.selectedAddressBackground(key),
                                                     color:this.selectedAddressColor(key)}}
-           onClick={()=>{this.setSelectedAddressIndex(key);
-                        this.setToLocation(value);
+           onClick={()=>{console.log(this.props.toLocation);
+             this.setSelectedAddressIndex(key);
+                        this.setToLocation({lat:Number(value.lat),lng:Number(value.lon)});
+                        setTimeout(()=>this.setToLocation({lat:Number(value.lat),lng:Number(value.lon)}),0);
            }} 
            key={key}>{value.display_name}</li>)
          }
         </ul>}
-        <a href="#" className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#completeCharge">Đặt xe</a>
+        {toLocation && (toLocation[0]!==fromLocation[0] && toLocation[1]!==fromLocation[1]) ? (<a href="#" onClick={()=>this.sendLocation()} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#completeCharge">Đặt xe</a>):null}
 <Modals/>
            </div>
         );
