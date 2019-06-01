@@ -6,8 +6,10 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      phoneNumber:null,
       listSearch:null,
       selectedAddressIndex : null,
+      listenLocation:null,
     } 
     this.sendLocation = this.sendLocation.bind(this);
     this.socket =io('http://localhost:8080/')
@@ -20,16 +22,17 @@ class Form extends Component {
     if(toLocation) this.props.setToLocation(null);
     else this.props.setToLocation(location[0].location);
     })
-    this.socket.on('send_driverLocation_to_guest001',(location)=>{
-      console.log(location);
-  })
-  }
-  
+    
+}
   sendLocation(){
+    const {phoneNumber}=this.refs;
     const toLocation=this.props.toLocation;
-    const info={id:"001", toLocation:toLocation};
-    console.log(toLocation);
+    const info={id:phoneNumber.value, toLocation:toLocation};
     this.socket.emit('guest_send_location',info);
+    this.setState({listenLocation:this.socket.on(phoneNumber.value,(location)=>{
+      console.log(location);
+   })});
+      
   }
   selectedAddressBackground(key){
       return ((key===this.state.selectedAddressIndex)? 'black' : 'white')
@@ -48,8 +51,8 @@ setSelectedAddressIndex(selectedAddressIndex) {
     if(toLocation) this.props.setToLocation(null);
     else this.props.setToLocation(location)
   }
-    render() {
-        const address=this.refs.address;
+      render() {
+        const {address,phoneNumber}=this.refs;
         const listSearch=this.state.listSearch;
         const {fromLocation,toLocation} = this.props;
         console.log(fromLocation);
@@ -60,11 +63,18 @@ setSelectedAddressIndex(selectedAddressIndex) {
             <form action="#" method="get">
           <div className="form-group row">
             <div className="col-md-6">
-              <input ref="address"name="q" type="text" className="form-control" placeholder="Chọn trong bản đồ hoặc nhập địa chỉ cần đến" />
+              <input ref="phoneNumber" type="text" className="form-control" placeholder="Nhập số điện thoại" />
+              <input ref="address" type="text" className="form-control" placeholder="Chọn trong bản đồ hoặc nhập địa chỉ cần đến" />
             </div>
             <div className="col-md-6 ml-auto">
               <div className="toggle-button align-items-center d-flex">
-              <a href="#" onClick={()=>api.getToLocation(address.value,this.setListSearch)} className="btn btn-primary py-3 px-5">Tìm kiếm</a>
+              <a href="#" onClick={()=>{
+                this.setState({phoneNumber:phoneNumber.value});
+api.getToLocation(address.value,this.setListSearch)
+}
+              }
+                
+                 className="btn btn-primary py-3 px-5">Tìm kiếm</a>
               </div>
             </div>
           </div>

@@ -30,7 +30,7 @@ class HomePage extends Component {
       this.setState({toAddress});
   }
     componentWillMount() {
-        navigator.geolocation.getCurrentPosition((pos)=>{
+        navigator.geolocation.watchPosition((pos)=>{
           this.setState({
             toLocation:[pos.coords.latitude,pos.coords.longitude],
             fromLocation:[pos.coords.latitude,pos.coords.longitude]
@@ -43,7 +43,7 @@ class HomePage extends Component {
             <body style={{overflowX :"hidden"}} data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
             <div className="site-wrap"  id="home-section">
             <Header/>
-            <Route exact path="/driver/" render={props=><DriverContent fromLocation={this.state.fromLocation} setRoute={this.setRoute} setToLocation={this.setToLocation} toAddress={this.state.toAddress}/>} />
+            <Route exact path="/driver/" render={props=><DriverContent toLocation={this.state.toLocation} fromLocation={this.state.fromLocation} setRoute={this.setRoute} setToLocation={this.setToLocation} toAddress={this.state.toAddress}/>} />
             <Route exact path="/" render={props=><Form toLocation={this.state.toLocation}  fromLocation={this.state.fromLocation} setRoute={this.setRoute} setToLocation={this.setToLocation} toAddress={this.state.toAddress}/>} />
             <GrobMap setToAddress={this.setToAddress} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/>
             <Footer/>

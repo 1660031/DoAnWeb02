@@ -16,11 +16,11 @@ class DriverContent extends Component {
     })
   }
   sendLocation(){
-    const fromLocation=this.props.fromLocation;
-    const info={id :"driver001" ,location :fromLocation};
-    console.log(fromLocation);
+    const {toLocation}=this.props;
+    const info={id :"driver002" ,location :toLocation};
+    console.log(toLocation);
     this.socket.emit('driver_send_location',info);
-    setInterval(()=>this.socket.emit('driver_update_location',info),3000);
+    setInterval(()=>this.socket.emit('driver_send_location',info),3000);
   }
     render() {
       const {fromLocation} = this.props;
@@ -33,7 +33,7 @@ class DriverContent extends Component {
           <div className="form-group row">
             <div className="col-lg-6">
               <div className="toggle-button align-items-center d-flex">
-                <a onClick={()=>this.sendLocation(fromLocation)} href="#" className="btn btn-primary py-3 px-5">Bắt đầu nhận cước từ khách</a>
+                <a onClick={()=>this.sendLocation()} href="#" className="btn btn-primary py-3 px-5">Bắt đầu nhận cước từ khách</a>
                 <a href="#" className="site-menu-toggle p-5 js-menu-toggle text-black d-inline-block d-lg-none d-flex">
                   <span className="icon-menu h3 m-0" />
                 </a>
