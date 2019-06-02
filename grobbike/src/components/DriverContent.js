@@ -7,7 +7,6 @@ class DriverContent extends Component {
     this.state = {
 
     } 
-    this.sendLocation = this.sendLocation.bind(this);
     this.socket =io('http://localhost:8080/')
     this.socket.on('server_send_location',(location)=>{
       var toLocation = this.props.toLocation;
@@ -15,12 +14,8 @@ class DriverContent extends Component {
     else this.props.setToLocation(location[0].location);
     })
   }
-  sendLocation(){
-    const {toLocation}=this.props;
-    const info={id :"driver002" ,location :toLocation};
-    console.log(toLocation);
-    this.socket.emit('driver_send_location',info);
-    setInterval(()=>this.socket.emit('driver_send_location',info),3000);
+  sendLocation = () => {
+    setInterval(()=>this.socket.emit('driver_send_location',{id :"driver002" ,location:this.props.toLocation}),3000);
   }
     render() {
       const {fromLocation} = this.props;

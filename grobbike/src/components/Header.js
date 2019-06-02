@@ -7,7 +7,7 @@ class Header extends Component {
             <div className="container">
               <div className="row align-items-center position-relative">
                 <div className="site-logo">
-                  <a href="index.html" className="text-black"><span className="text-primary">Grob</span></a>
+                  <a href="/" className="text-black"><span className="text-primary">Grob</span></a>
                 </div>
                 <div className="col-12">
                   <nav className="site-navigation text-center " role="navigation">

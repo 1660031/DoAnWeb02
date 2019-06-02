@@ -11,7 +11,7 @@ class GrobMap extends React.Component {
       distance:0,
       time:0,
       route:null,
-
+      listDriver : null,
     }
     this.setRoute = this.setRoute.bind(this);
 
@@ -33,7 +33,7 @@ saveMap = (map) => {
 }
   render() {
     const {toLocation,fromLocation} = this.props;
-    const isMapInit = this.state.isMapInit;
+    const {listDriver,isMapInit} = this.state;
     console.log(toLocation);
     return (
     <LeafletMap
@@ -49,7 +49,14 @@ saveMap = (map) => {
           <Popup>
             Popup for any custom information.
           </Popup>
+         
         </Marker>
+        {(listDriver) && listDriver.map((value,key)=>
+            <Marker position={toLocation}>
+            <Popup>
+              Popup for any custom information.
+            </Popup>
+        </Marker>)}
         {toLocation && <Marker position={toLocation}>
           <Popup>
             Popup for any custom information.

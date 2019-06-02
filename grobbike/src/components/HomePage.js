@@ -29,7 +29,7 @@ class HomePage extends Component {
     setToAddress(toAddress){
       this.setState({toAddress});
   }
-    componentWillMount() {
+    componentDidMount() {
         navigator.geolocation.watchPosition((pos)=>{
           this.setState({
             toLocation:[pos.coords.latitude,pos.coords.longitude],
