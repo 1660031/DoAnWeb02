@@ -110,33 +110,63 @@ class Modals extends Component {
       </div>
       <div className="modal-body p-5">
         <div className="container">
-  <div className="col-md-8 mx-auto">
-    <h1 className="text-center mt-5 mb-5">ĐĂNG KÝ</h1>
-    <form method="POST">
-      <div className="form-group row">
-        <div className="col-md-12">
-          <input className="form-control border" type="text" name="username" placeholder="Số điện thoại" /> 
+          <div className="col-md-8 mx-auto">
+            <h1 className="text-center mb-5">ĐĂNG KÝ</h1>
+            <form method="POST">
+              <div className="form-group row">
+                <div className="col-md-12">
+                  <input className="form-control border" type="text" name="username" placeholder="Số điện thoại" /> 
+                </div>
+              </div> 
+              <div className="form-group row">
+                <div className="col-md-12">
+                  <input className="form-control border" type="text" name="fullname" placeholder="Tên đầy đủ" /> 
+                </div>
+              </div>   
+              <div className="form-group row">
+                <div className="col-md-4 mb-4 mb-lg-0">
+                  <label className="text-black">&nbsp;&nbsp;&nbsp;Giới tính</label>
+                </div>
+                <div className="col-md-4">
+                  <label><input  type="radio" name="radioSex" />&nbsp;&nbsp;&nbsp;Nam</label>
+                </div>
+                <div className="col-md-4">              
+                  <label><input  type="radio" name="radioSex" />&nbsp;&nbsp;&nbsp;Nữ</label>
+                </div>
+              </div>              
+              <div className="form-group row">
+                <div className="col-md-12">
+                  <input className="form-control border" type="password" name="password" placeholder="Mật khẩu" /> 
+                </div>
+              </div>                 
+              <div className="form-group row">
+                <div className="col-md-12">
+                  <input className="form-control border" type="password" name="repeatpw" placeholder="Xác nhận mật khẩu" />
+                </div>
+              </div>
+              <div className="form-group row">
+                <div className="col-md-12">
+                <select id="company" class="form-control border">
+                  <option value="" disabled selected>Chọn loại xe</option>
+                  <option>Wave</option>
+                  <option>Sirius</option>
+                  <option>SH</option>
+                  <option>Dream</option>
+                  <option>Exciter</option>
+                  <option>Jupiter</option>
+                  <option>Vision</option>
+                </select> 
+                </div>
+              </div>
+              <div className="form-group row">
+                <div className="col-md-12">
+                  <input className="form-control border" type="text" name="BSxe" placeholder="Biển số xe" />
+                </div>
+              </div>
+              <input className="btn btn-block btn-primary text-white py-3 px-5" type="submit" name="submit" defaultValue="ĐĂNG KÝ" />
+            </form>
+          </div>
         </div>
-      </div> 
-      <div className="form-group row">
-        <div className="col-md-12">
-          <input className="form-control border" type="text" name="fullname" placeholder="Tên đầy đủ" /> 
-        </div>
-      </div>                 
-      <div className="form-group row">
-        <div className="col-md-12">
-          <input className="form-control border" type="password" name="password" placeholder="Mật khẩu" /> 
-        </div>
-      </div>                 
-      <div className="form-group row">
-        <div className="col-md-12">
-          <input className="form-control border" type="password" name="repeatpw" placeholder="Xác nhận mật khẩu" />
-        </div>
-      </div>
-      <input className="btn btn-block btn-primary text-white py-3 px-5" type="submit" name="submit" defaultValue="ĐĂNG KÝ" />
-    </form>
-  </div>
-</div>
 
       </div>
     </div>
@@ -151,26 +181,25 @@ class Modals extends Component {
         </button>
       </div>
       <div className="modal-body p-5">
-      <div className="container">
-  <div className="col-md-8 mx-auto">
-    <h1 className="text-center mt-5 mb-5">ĐĂNG NHẬP</h1>
-    <form method="POST">
-      <div className="form-group row">
-        <div className="col-md-12">
-          <input className="form-control border" type="text" name="username" placeholder="Số điện thoại" /> 
+        <div className="container">
+          <div className="col-md-8 mx-auto">
+            <h1 className="text-center mt-5 mb-5">ĐĂNG NHẬP</h1>
+            <form method="POST">
+              <div className="form-group row">
+                <div className="col-md-12">
+                  <input className="form-control border" type="text" name="username" placeholder="Số điện thoại" /> 
+                </div>
+              </div>  
+                                                       
+              <div className="form-group row">
+                <div className="col-md-12">
+                  <input className="form-control border" type="password" name="password" placeholder="Mật khẩu" /> 
+                </div>
+              </div>                 
+              <input className="btn btn-block btn-primary text-white py-3 px-5" type="submit" name="submit" defaultValue="ĐĂNG NHẬP" />
+            </form>
+          </div>
         </div>
-      </div>                                           
-      <div className="form-group row">
-        <div className="col-md-12">
-          <input className="form-control border" type="password" name="password" placeholder="Mật khẩu" /> 
-        </div>
-      </div>                 
-      <input className="btn btn-block btn-primary text-white py-3 px-5" type="submit" name="submit" defaultValue="ĐĂNG NHẬP" />
-    </form>
-  </div>
-</div>
-
-
       </div>
     </div>
   </div>
