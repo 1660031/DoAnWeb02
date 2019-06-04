@@ -12,12 +12,11 @@ class Header extends Component {
                 <div className="col-12">
                   <nav className="site-navigation text-center " role="navigation">
                     <ul className="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
-                      <li><Link to="/" className="nav-link">Trang chủ</Link></li>
+                      <li><a href="/" className="nav-link">Trang chủ</a></li>
                     </ul>
                   </nav>
                 </div>
                 <div className="toggle-button align-items-center d-flex">
-                <Link to="/driver" style={{marginRight: '20px'}}>Tài xế</Link>
                   <a data-toggle="modal" data-target="#signIn" href="#" style={{marginRight: '20px'}}>Đăng nhập</a>
                   <a data-toggle="modal" data-target="#signUp" href="#" className="btn btn-primary">Đăng ký</a>
                 </div>

@@ -2,6 +2,9 @@
     width: 100%;
     height: 700px;
   }
+.leaflet-routing-alternatives-container{
+    display: none;
+}
 #listSearch{
     background: white;
     padding:10px;

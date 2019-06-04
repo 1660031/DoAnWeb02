@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-
 class Modals extends Component {
     render() {
+      const {isDriver}=this.props;
         return (
             <div>
-                <div className="modal fade" id="completeCharge" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal fade" id="book" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div className="modal-content">
       <div className="modal-header">
@@ -44,34 +44,9 @@ class Modals extends Component {
     </div>
   </div>
 </div>
-<div className="modal fade" id="bookingReceive" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h5 className="modal-title text-black" id="exampleModalLabel">Thông tin khách hàng</h5>
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div className="modal-body p-5">
-        <div className="form-group row">
-          <div className="col-md-6">
-            <p>Số điện thoại: </p>
-            <p />
-          </div>
-          <div className="col-md-6">
-            {/*Hiển thị map*/}
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="col-md-6 ml-auto">
-            <input type="submit" className="btn btn-block btn-primary text-white py-3 px-5" defaultValue="Nhận cước" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
+
+{/* Hoàn thành chuyến */}
 <div className="modal fade" id="completeCharge" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div className="modal-content">
@@ -100,6 +75,7 @@ class Modals extends Component {
 </div>
 
 
+
 <div className="modal fade" id="signUp" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div className="modal-content">
@@ -112,7 +88,7 @@ class Modals extends Component {
         <div className="container">
           <div className="col-md-8 mx-auto">
             <h1 className="text-center mb-5">ĐĂNG KÝ</h1>
-            <form method="POST">
+            <form action="localhost:8080/signup" method="POST">
               <div className="form-group row">
                 <div className="col-md-12">
                   <input className="form-control border" type="text" name="username" placeholder="Số điện thoại" /> 
@@ -172,6 +148,8 @@ class Modals extends Component {
     </div>
   </div>
 </div>
+
+{/* Đăng nhập */}
 <div className="modal fade" id="signIn" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div className="modal-content">
@@ -184,20 +162,17 @@ class Modals extends Component {
         <div className="container">
           <div className="col-md-8 mx-auto">
             <h1 className="text-center mt-5 mb-5">ĐĂNG NHẬP</h1>
-            <form method="POST">
               <div className="form-group row">
                 <div className="col-md-12">
                   <input className="form-control border" type="text" name="username" placeholder="Số điện thoại" /> 
                 </div>
               </div>  
-                                                       
               <div className="form-group row">
                 <div className="col-md-12">
                   <input className="form-control border" type="password" name="password" placeholder="Mật khẩu" /> 
                 </div>
               </div>                 
-              <input className="btn btn-block btn-primary text-white py-3 px-5" type="submit" name="submit" defaultValue="ĐĂNG NHẬP" />
-            </form>
+              <a onClick = {()=>window.location.href = "/driver"} className="btn btn-block btn-primary text-white py-3 px-5"> Đăng nhập  </a>
           </div>
         </div>
       </div>
