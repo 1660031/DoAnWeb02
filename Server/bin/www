@@ -112,21 +112,20 @@ io.on('connection',(socket=>{
               if(value.isAvailable === true && checkCancelList(value.cancelList,passenger.id)===false)
               listDriverLocation.push(value.location);
             })
-            // const listDriverLocation = listDriver.map((value)=>{
-            //   if(value.isAvailable === false && checkCancelList(value.cancelList,passenger.id)===false)
-            //   return value.location;
-            //   } );
-            console.log("list: "+ listDriverLocation);
-            // const nearestLocation = findNearestLocation(passenger.fromLocation, listDriverLocation);
-            const nearestLocation = findNearestLocation(passenger.toLocation, listDriverLocation);
-            console.log("----------------");
-            console.log(nearestLocation);
-            // var fromLocation ={lat: 11.889189040934856, lng: 108.47917556762697};
-            listDriver.forEach((value,index)=> {if(value.location.lat === nearestLocation.location.lat && value.location.lng === nearestLocation.location.lng){driverId = index;}})
-            console.log("----------------");
-            console.log(listDriver[driverId].id);
-            io.sockets.emit(listDriver[driverId].id,{phoneNumber : passenger.id, fromLocation : passenger.fromLocation, toLocation : passenger.toLocation,distance: passenger.distance});
-            // driverResponse(listDriver[driverId].id);
+            if(listDriverLocation.length>0)
+            {
+              console.log("list: "+ listDriverLocation);
+              // const nearestLocation = findNearestLocation(passenger.fromLocation, listDriverLocation);
+              const nearestLocation = findNearestLocation(passenger.toLocation, listDriverLocation);
+              console.log("----------------");
+              console.log(nearestLocation);
+              // var fromLocation ={lat: 11.889189040934856, lng: 108.47917556762697};
+              listDriver.forEach((value,index)=> {if(value.location.lat === nearestLocation.location.lat && value.location.lng === nearestLocation.location.lng){driverId = index;}})
+              console.log("----------------");
+              console.log(listDriver[driverId].id);
+              io.sockets.emit(listDriver[driverId].id,{phoneNumber : passenger.id, fromLocation : passenger.fromLocation, toLocation : passenger.toLocation,distance: passenger.distance});
+            }
+            
           }
         })
     socket.on('driver_on',(info)=>
