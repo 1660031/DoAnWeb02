@@ -76,32 +76,102 @@ function onError(error) {
       throw error;
   }
 }
-var arr=[];
+const findNearestLocation = require('map-nearest-location');
+var listDriver=[];
 var socketHandle = require('../socketHandle');
+require('events').EventEmitter.prototype._maxListeners = 20000;
+const maxListenersExceededWarning = require('max-listeners-exceeded-warning');
+maxListenersExceededWarning();
+var checkCancelList= (list,id) =>{
+  var cancelId;
+  if(list.length === 0) return false
+  else{
+    list.forEach((value)=> {
+      if(value===id) 
+      {
+        console.log("cancel");
+        cancelId=value;
+      }
+    })
+    return cancelId===id;
+  }
+}
 io.on('connection',(socket=>{
     console.log("Client Connected : "+socket.id)
-    socket.on('guest_send_location',(info)=>
+    socket.on('guest',(passenger)=>
         {
-          console.log(info);
-         
-            console.log(";;;" + info);
-            io.sockets.emit("send_driverLocation_to_guest"+info.id ,location)
-          // socketHandle.queryLocation(io);
+          // const currentArray = listDriver;
+          var driverId;
+          console.log(passenger);
+          console.log(passenger.fromLocation);
+          console.log(passenger.toLocation);
+          if(listDriver.length>0){
+            var listDriverLocation =[];
+            listDriver.forEach((value)=>{
+              console.log(checkCancelList(value.cancelList,passenger.id));
+              if(value.isAvailable === true && checkCancelList(value.cancelList,passenger.id)===false)
+              listDriverLocation.push(value.location);
+            })
+            // const listDriverLocation = listDriver.map((value)=>{
+            //   if(value.isAvailable === false && checkCancelList(value.cancelList,passenger.id)===false)
+            //   return value.location;
+            //   } );
+            console.log("list: "+ listDriverLocation);
+            // const nearestLocation = findNearestLocation(passenger.fromLocation, listDriverLocation);
+            const nearestLocation = findNearestLocation(passenger.toLocation, listDriverLocation);
+            console.log("----------------");
+            console.log(nearestLocation);
+            // var fromLocation ={lat: 11.889189040934856, lng: 108.47917556762697};
+            listDriver.forEach((value,index)=> {if(value.location.lat === nearestLocation.location.lat && value.location.lng === nearestLocation.location.lng){driverId = index;}})
+            console.log("----------------");
+            console.log(listDriver[driverId].id);
+            io.sockets.emit(listDriver[driverId].id,{phoneNumber : passenger.id, fromLocation : passenger.fromLocation, toLocation : passenger.toLocation,distance: passenger.distance});
+            // driverResponse(listDriver[driverId].id);
+          }
         })
-    socket.on('driver_send_location',(info)=>
+    socket.on('driver_on',(info)=>
         {
-          arr.push(info);
-          console.log(arr);
-          socket.on('driver_update_location',(data)=>
+            var isExist = false;
+            listDriver.forEach((element,index,arr) => {
+              if(element.id === info.id)
+              {
+                arr[index].location = info.location
+                isExist=true; 
+                console.log("đã tồn tại, cập nhật vào!!!!!")
+              }
+            });
+            if(isExist === false) {
+              console.log("chưa tồn tại, thêm vào!!!!!");
+              info.isAvailable = true;
+              info.cancelList = [];
+              listDriver.push(info);}
+            console.log(listDriver);
+          }
+    )
+    socket.on('accept',(res)=>{
+      console.log(res);
+      listDriver.forEach((element,index) => {
+        if(element.id === res.id)
+        {
+          if(res.accept===true)
           {
-            arr.map((driver) => {
-              if(driver.id==data.id)
-                driver.location = data.location})
-          })
+            listDriver[index].isAvailable = false;
+            var interval = setInterval(()=>{
+              if(listDriver[index].isAvailable===true) clearInterval(interval);
+              else io.sockets.emit(res.guest,{id :listDriver[index].id ,location : listDriver[index].location})}
+              ,3000);
+            console.log("đã nhan chuyen!!!!!")
+          }
+          else{
+            listDriver[index].cancelList.push(res.guest);
+            io.sockets.emit(res.guest,{cancel :"da huy chuyen"});
+            console.log("da huy chuyen");
+          }
         }
+      });
+      }
     )
 }))
-
 
 
 

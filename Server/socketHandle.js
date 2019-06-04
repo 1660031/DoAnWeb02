@@ -33,7 +33,7 @@ var updateLocation = function(pos){
       });
     }
 }
-var queryLocation = function(io){
+var queryLocation = function(emit){
     {
         MongoClient.connect(url, function (err, db) {
         if (err) {
@@ -48,18 +48,20 @@ var queryLocation = function(io){
       
           //Create some users
           // Insert some users
-        collection.find({name: 'Châu Hoàng Ấn'}).toArray(function (err, result) {
+          setInterval(()=>collection.find({name: 'Châu Hoàng Ấn'}).toArray(function (err, result) {
             if (err) {
               console.log(err);
             } else if (result.length) {
-              io.sockets.emit('server_send_location',result);
-              io.sockets.emit('server_send_location',result);
+              // io.sockets.emit('server_send_location',result);
+              // io.sockets.emit('server_send_location',result);
+              emit(result[0].location);
+
             } else {
               console.log('No document(s) found with defined "find" criteria!');
             }
             //Close connection
             db.close();
-          });
+          }),3000) 
         }
       });
     }
