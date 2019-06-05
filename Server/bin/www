@@ -125,7 +125,13 @@ io.on('connection',(socket=>{
               console.log(listDriver[driverId].id);
               io.sockets.emit(listDriver[driverId].id,{phoneNumber : passenger.id, fromLocation : passenger.fromLocation, toLocation : passenger.toLocation,distance: passenger.distance});
             }
-            
+            else{
+              socket.emit("unavailable",{unavailable :true});
+
+            }
+          }
+          else{
+            socket.emit("unavailable",{unavailable :true});
           }
         })
     socket.on('driver_on',(info)=>
