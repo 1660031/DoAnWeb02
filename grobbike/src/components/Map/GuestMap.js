@@ -1,14 +1,12 @@
 import React from 'react'
 import { Map as LeafletMap, TileLayer, Marker, Popup} from 'react-leaflet';
-import Routing from './ReactLeaflet/Routing'
+import Routing from '../ReactLeaflet/Routing'
 import L from 'leaflet'
 import 'leaflet'
-import des from  './Images/des.png'
-import driver from  './Images/Driver.png'
-import guest from  './Images/guest.jpg'
-
-import * as api from './Api'
-class GrobMap extends React.Component {
+import des from  '../Images/des.png'
+import driver from  '../Images/Driver.png'
+import guest from  '../Images/guest.jpg'
+class GuestMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,7 +47,7 @@ saveMap = (map) => {
     iconSize:[25, 41], // size of the icon
     iconAnchor:   [21, 54],
   });
-    const {driverLocation,toLocation,fromLocation,guestToLocation,guestFromLocation,setDisTime} = this.props;
+    const {driverLocation,toLocation,fromLocation,setDisTime} = this.props;
     console.log("driver location : ");
     console.log(driverLocation);
     const {listDriver,isMapInit} = this.state;
@@ -75,20 +73,7 @@ saveMap = (map) => {
           <Popup>
             Popup for any custom information.
           </Popup>
-    </Marker>}
-    {/* {driverLocation && <Routing  color="blue" setRoute={this.setRoute} from={driverLocation} to={fromLocation} map={this.map}/> } */}
-        {guestToLocation && guestFromLocation && <Routing  color="red" setRoute={this.setRoute} from={guestFromLocation} to={guestToLocation} map={this.map}/>}
-  }
-  {guestToLocation && <Marker icon={desIcon} position={guestToLocation}>
-          <Popup>
-            Popup for any custom information.
-          </Popup>
-  </Marker>}
-  {guestFromLocation && <Marker icon={guestIcon} position={guestFromLocation}>
-          <Popup>
-            Popup for any custom information.
-          </Popup>
-  </Marker>}
+    </Marker>}        
         {(listDriver) && listDriver.map((value,key)=>
             <Marker position={toLocation}>
             <Popup>
@@ -105,4 +90,4 @@ saveMap = (map) => {
     );
   }
 }
-export default GrobMap;
+export default GuestMap;

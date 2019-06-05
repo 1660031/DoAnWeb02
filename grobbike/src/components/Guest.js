@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import GrobMap from './GrobMap'
+import GuestMap from './Map/GuestMap'
 import io from 'socket.io-client'
 import DriverReceived from './Modals/DriverReceived'
 
@@ -16,7 +16,9 @@ class Guest extends Component {
       toAddress: null,
       fromLocation : null,
       toLocation : null,
-      driverLocation :null,
+      driverInfo :null,
+      driverID: null,
+      driverLocation : null,
       route:null,
       distance:0,
       time:0,
@@ -48,9 +50,9 @@ setSocket = (socket) =>{
       }
       else{
         console.log(res);
-        this.setState({driverLocation : [res.location.lat,res.location.lng]});
-        var modal = document.getElementById('bookingReceive');
+        this.setState({driverLocation : [res.location.lat,res.location.lng],driverInfo : res.info, driverID : res.id});
         setTimeout(()=>{
+          var modal = document.getElementById('driverReceived');
           modal.classList.add('show');
           modal.style.display = 'block';
           },1000);
@@ -90,9 +92,8 @@ setSocket = (socket) =>{
   //   modal.style.display = 'block';
 }
       render() {
-       
         const {address,phoneNumber}=this.refs;
-        const {driverLocation,distance,listSearch,fromLocation,toLocation} = this.state;
+        const {driverInfo,driverID,distance,listSearch,fromLocation,toLocation} = this.state;
         // console.log(fromLocation);
         // console.log(toLocation);
         // console.log(distance);
@@ -126,9 +127,9 @@ setSocket = (socket) =>{
            key={key}>{value.display_name}</li>)
          }
         </ul>}
-        <DriverReceived/>
+        {driverInfo && <DriverReceived distance={distance} driverInfo={driverInfo} driverID={driverID} />}
         {toLocation && <a href="#" onClick={()=>{this.sendLocation()}} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#book">Đặt xe</a>}
-           <GrobMap driverLocation={this.state.driverLocation} setDisTime={this.setDisTime} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/>
+           <GuestMap driverLocation={this.state.driverLocation} setDisTime={this.setDisTime} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/>
            </div>
         );
     }

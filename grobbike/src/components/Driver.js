@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client'
-import GrobMap from './GrobMap'
-import BookingReceive from './Modals/BookingReceive'
+import DriverMap from './Map/DriverMap'
+import BookingReceived from './Modals/BookingReceived'
 import { timingSafeEqual } from 'crypto';
 class Driver extends Component {
   constructor(props) {
@@ -11,6 +11,11 @@ class Driver extends Component {
       guestFromLocation : null,
       guestToLocation : null,
       guestPhoneNumber:null,
+      info:{
+        name: "Ragnar Lothbrok",
+        bikeModel : "Super Dream",
+        bikeNumber :"8263",
+      },
       distance :0,
       toLocation : null,
     } 
@@ -21,21 +26,22 @@ class Driver extends Component {
     else this.props.setToLocation(location[0].location);
     })
   }
-  accept = () =>{
+  accept = (setIsAccept) =>{
     const {id}=this.refs;
     console.log("accept");
-    this.socket.emit('accept',{id :id.value ,accept:true,guest: this.state.guestPhoneNumber});
+    setIsAccept();
+    this.socket.emit('confirm',{id :id.value ,accept:true,guest: this.state.guestPhoneNumber});
   }
   cancel = () =>{
     const {id}=this.refs;
     console.log("cancel");
-    this.socket.emit('accept',{id :id.value ,accept:false,guest: this.state.guestPhoneNumber});
+    this.socket.emit('confirm',{id :id.value ,accept:false,guest: this.state.guestPhoneNumber});
   }
   sendLocation = () => {
     const {id,driverModal}=this.refs;
     const {toLocation,location} = this.state;
     var fakeLocation ={lat: 11.889189040934856, lng: 108.47917556762697};
-    setInterval(()=>this.socket.emit('driver_on',{id :id.value ,location:this.state.toLocation}),3000);
+    setInterval(()=>this.socket.emit('driver_on',{id :id.value ,location:this.state.toLocation,info : this.state.info}),3000);
     // setInterval(()=>this.socket.emit('driver_on',{id :"driver001" ,location:{lat : location[0],lng : location[1]}}),10000);
     this.socket.on(id.value,(info)=>{
       console.log(info);
@@ -45,8 +51,8 @@ class Driver extends Component {
             guestToLocation : [info.toLocation.lat,info.toLocation.lng],
             guestFromLocation : [info.fromLocation.lat,info.fromLocation.lng],
           });
-          var modal = document.getElementById('bookingReceive');
           setTimeout(()=>{
+          var modal = document.getElementById('bookingReceived');
           modal.classList.add('show');
           modal.style.display = 'block';
           driverModal.startTimer();
@@ -64,7 +70,7 @@ class Driver extends Component {
         location:[pos.coords.latitude,pos.coords.longitude],
        });
   });
-  // var modal = document.getElementById('bookingReceive');
+  // var modal = document.getElementById('bookingReceived');
   // setTimeout(()=>{
   // modal.classList.add('show');
   // modal.style.display = 'block';
@@ -73,6 +79,7 @@ class Driver extends Component {
     render() {
       var fakeLocation ={lat: 11.889189040934856, lng: 108.47917556762697};
       const {toLocation,guestPhoneNumber,distance,location,guestFromLocation,guestToLocation} = this.state;
+      console.log(toLocation)
         return (
             <div className="site-section-cover overlay img-bg-section" style={{backgroundImage: 'url("")'}}>
   <div className="container">
@@ -96,8 +103,8 @@ class Driver extends Component {
       </div>
     </div>
   </div>
-  <BookingReceive ref="driverModal" accept={this.accept} cancel = {this.cancel} guestPhoneNumber={guestPhoneNumber} distance ={distance} guestFromLocation= {guestFromLocation} guestToLocation={guestToLocation} fakeLocation={fakeLocation}/>
-  <GrobMap toLocation={toLocation} setToLocation={this.setToLocation} fromLocation={location}/>
+  <BookingReceived ref="driverModal"  accept={this.accept} cancel = {this.cancel} guestPhoneNumber={guestPhoneNumber} distance ={distance} guestFromLocation= {guestFromLocation} guestToLocation={guestToLocation} toLocation={this.state.toLocation}/>
+  <DriverMap location={location} toLocation={this.state.toLocation} setToLocation={this.setToLocation} center={location}/>
 </div>
 
         );
