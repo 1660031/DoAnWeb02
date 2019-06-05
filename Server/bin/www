@@ -100,16 +100,16 @@ io.on('connection',(socket=>{
     console.log("Client Connected : "+socket.id)
     socket.on('guest',(passenger)=>
         {
-          // const currentArray = listDriver;
+          const currentArray = listDriver;
           var driverId;
           console.log(passenger);
           console.log(passenger.fromLocation);
           console.log(passenger.toLocation);
-          if(listDriver.length>0){
+          if(currentArray.length>0){
             var listDriverLocation =[];
-            listDriver.forEach((value)=>{
+            currentArray.forEach((value)=>{
               console.log(checkCancelList(value.cancelList,passenger.id));
-              if(value.isAvailable === true && checkCancelList(value.cancelList,passenger.id)===false)
+              if(value.isAvailable === true && checkCancelList(value.cancelList,passenger.id)===false && value.location !==null)
               listDriverLocation.push(value.location);
             })
             if(listDriverLocation.length>0)
@@ -153,7 +153,7 @@ io.on('connection',(socket=>{
             console.log(listDriver);
           }
     )
-    socket.on('accept',(res)=>{
+    socket.on('confirm',(res)=>{
       console.log(res);
       listDriver.forEach((element,index) => {
         if(element.id === res.id)
@@ -163,7 +163,7 @@ io.on('connection',(socket=>{
             listDriver[index].isAvailable = false;
             var interval = setInterval(()=>{
               if(listDriver[index].isAvailable===true) clearInterval(interval);
-              else io.sockets.emit(res.guest,{id :listDriver[index].id ,location : listDriver[index].location})}
+              else io.sockets.emit(res.guest,{id :listDriver[index].id ,info : listDriver[index].info,location : listDriver[index].location})}
               ,3000);
             console.log("đã nhan chuyen!!!!!")
           }
