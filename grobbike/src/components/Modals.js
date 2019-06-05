@@ -4,48 +4,6 @@ class Modals extends Component {
       const {isDriver}=this.props;
         return (
             <div>
-                <div className="modal fade" id="book" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h5 className="modal-title text-black" id="exampleModalLabel">Thông tin tài xế</h5>
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div className="modal-body p-5">
-        <div className="form-group row">
-          <div className="col-md-6 mb-4 mb-lg-0">
-            <p>Họ tên:</p>
-            <p />
-          </div>
-          <div className="col-md-6">
-            <p>Số điện thoại: </p>
-            <p />
-          </div>
-          <div className="col-md-6">
-            <p>Hiệu xe: </p>
-            <p />
-          </div>
-          <div className="col-md-6">
-            <p>Biển số: </p>
-            <p />
-          </div>
-          <div className="col-md-6">
-            {/*Hiển thị map */}
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="col-md-6 ml-auto">
-            <input type="submit" className="btn btn-block btn-primary text-white py-3 px-5" defaultValue="Xác nhận" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 {/* Hoàn thành chuyến */}
 <div className="modal fade" id="completeCharge" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div className="modal-dialog modal-dialog-centered modal-lg" role="document">

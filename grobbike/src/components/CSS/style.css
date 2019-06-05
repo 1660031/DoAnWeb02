@@ -2,8 +2,18 @@
     width: 100%;
     height: 700px;
   }
+  .modal-body .form-group .leaflet-container{
+    width: 100%;
+    height: 580px;
+    margin-bottom: 20px;
+  }
 .leaflet-routing-alternatives-container{
     display: none;
+}
+.site-section-cover p {
+    font-size: 18px;
+    color : black;
+    max-width: 400px;
 }
 #listSearch{
     background: white;

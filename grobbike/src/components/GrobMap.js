@@ -22,7 +22,7 @@ class GrobMap extends React.Component {
 }
   addToMarker = (e) => {
     var {toLocation,setToLocation}=this.props;
-    if(toLocation && setToLocation) this.props.setToLocation(null);
+    if(setToLocation) this.props.setToLocation(null);
     toLocation = e.latlng;
     // api.getAddress(e.latlng["lat"],e.latlng["lng"],this.props.setToAddress);
     if(setToLocation) this.props.setToLocation(toLocation);
@@ -35,12 +35,14 @@ saveMap = (map) => {
   render() {
     var desIcon = L.icon({
       iconUrl: des,
-      iconSize:[41, 61], // size of the icon
-  });
+      iconSize:[50, 49], // size of the icon
+      iconAnchor:   [26, 43],
+    });
   var driverIcon = L.icon({
     iconUrl: driver,
     iconSize:[25, 41], // size of the icon
-});
+    iconAnchor:   [21, 54],
+  });
     const {driverLocation,toLocation,fromLocation,guestToLocation,guestFromLocation,setDisTime} = this.props;
     console.log("driver location : ");
     console.log(driverLocation);
@@ -51,7 +53,7 @@ saveMap = (map) => {
     <LeafletMap
         ref={this.saveMap}
         center={fromLocation}
-        zoom={15}
+        zoom={13}
         minZoom={13}
         onClick={this.addToMarker}
       >
@@ -69,16 +71,20 @@ saveMap = (map) => {
           </Popup>
     </Marker>}
     {/* {driverLocation && <Routing  color="blue" setRoute={this.setRoute} from={driverLocation} to={fromLocation} map={this.map}/> } */}
-        {guestToLocation && guestFromLocation
-    && <Routing  color="red" setRoute={this.setRoute} from={guestFromLocation} to={guestToLocation} map={this.map}/>}
+        {guestToLocation && guestFromLocation && <Routing  color="red" setRoute={this.setRoute} from={guestFromLocation} to={guestToLocation} map={this.map}/>}
   }
+  {guestToLocation && <Marker icon={desIcon} position={guestToLocation}>
+          <Popup>
+            Popup for any custom information.
+          </Popup>
+  </Marker>}
         {(listDriver) && listDriver.map((value,key)=>
             <Marker position={toLocation}>
             <Popup>
               Popup for any custom information.
             </Popup>
         </Marker>)}
-        {(toLocation) && <Marker position={toLocation}>
+        {(toLocation) && <Marker icon={desIcon} position={toLocation}>
           <Popup>
             Popup for any custom information.
           </Popup>

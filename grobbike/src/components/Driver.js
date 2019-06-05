@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client'
 import GrobMap from './GrobMap'
-import DriverModals from './Modals/DriverModals'
+import BookingReceive from './Modals/BookingReceive'
 import { timingSafeEqual } from 'crypto';
 class Driver extends Component {
   constructor(props) {
@@ -32,7 +32,7 @@ class Driver extends Component {
     this.socket.emit('accept',{id :id.value ,accept:false,guest: this.state.guestPhoneNumber});
   }
   sendLocation = () => {
-    const {id}=this.refs;
+    const {id,driverModal}=this.refs;
     const {toLocation,location} = this.state;
     var fakeLocation ={lat: 11.889189040934856, lng: 108.47917556762697};
     setInterval(()=>this.socket.emit('driver_on',{id :id.value ,location:this.state.toLocation}),3000);
@@ -47,8 +47,9 @@ class Driver extends Component {
           });
           var modal = document.getElementById('bookingReceive');
           setTimeout(()=>{
-            modal.classList.add('show');
+          modal.classList.add('show');
           modal.style.display = 'block';
+          driverModal.startTimer();
           },1000);
     })
   }
@@ -63,6 +64,11 @@ class Driver extends Component {
         location:[pos.coords.latitude,pos.coords.longitude],
        });
   });
+  // var modal = document.getElementById('bookingReceive');
+  // setTimeout(()=>{
+  // modal.classList.add('show');
+  // modal.style.display = 'block';
+  // },1000);
 }
     render() {
       var fakeLocation ={lat: 11.889189040934856, lng: 108.47917556762697};
@@ -90,8 +96,8 @@ class Driver extends Component {
       </div>
     </div>
   </div>
-  <DriverModals accept={this.accept} cancel = {this.cancel} guestPhoneNumber={guestPhoneNumber} distance ={distance} guestFromLocation= {guestFromLocation} guestToLocation={guestToLocation} fakeLocation={fakeLocation}/>
-  <GrobMap toLocation={toLocation} setToLocation={this.setToLocation} fromLocation={fakeLocation}/>
+  <BookingReceive ref="driverModal" accept={this.accept} cancel = {this.cancel} guestPhoneNumber={guestPhoneNumber} distance ={distance} guestFromLocation= {guestFromLocation} guestToLocation={guestToLocation} fakeLocation={fakeLocation}/>
+  <GrobMap toLocation={toLocation} setToLocation={this.setToLocation} fromLocation={location}/>
 </div>
 
         );

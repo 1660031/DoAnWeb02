@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import GrobMap from './GrobMap'
-import Driver from './Images/Driver.png'
-import L from 'leaflet';
 import io from 'socket.io-client'
+import DriverReceived from './Modals/DriverReceived'
 
 import * as api from './Api'
 class Guest extends Component {
@@ -50,19 +49,27 @@ setSocket = (socket) =>{
       else{
         console.log(res);
         this.setState({driverLocation : [res.location.lat,res.location.lng]});
+        var modal = document.getElementById('bookingReceive');
+        setTimeout(()=>{
+          modal.classList.add('show');
+          modal.style.display = 'block';
+          },1000);
         console.log("tai xe da nhan chuyen");
       }
    });
+   this.socket.on("unavailable",(res)=>{
+    alert("Vui lòng thử lại!!!");
+ });
   }
   selectedAddressBackground = (key) =>{
       return ((key===this.state.selectedAddressIndex)? 'black' : 'white')
   }
   selectedAddressColor = (key) =>{
     return ((key===this.state.selectedAddressIndex)? 'white' : 'black')
-}
-setSelectedAddressIndex = (selectedAddressIndex) =>{
+  }
+  setSelectedAddressIndex = (selectedAddressIndex) =>{
   this.setState({selectedAddressIndex});
-}
+  }
   setListSearch = (listSearch) =>{
     this.setState({listSearch});
   }
@@ -75,10 +82,12 @@ setSelectedAddressIndex = (selectedAddressIndex) =>{
     navigator.geolocation.watchPosition((pos)=>{
       this.setState({
         // toLocation:[pos.coords.latitude,pos.coords.longitude],
-        toLocation:[pos.coords.latitude,pos.coords.longitude],
         fromLocation:[pos.coords.latitude,pos.coords.longitude]
        });
   });
+  // var modal = document.getElementById('driverReceived');
+  //   modal.classList.toggle('show');
+  //   modal.style.display = 'block';
 }
       render() {
        
@@ -117,7 +126,8 @@ setSelectedAddressIndex = (selectedAddressIndex) =>{
            key={key}>{value.display_name}</li>)
          }
         </ul>}
-        {toLocation && (toLocation[0]!==fromLocation[0] && toLocation[1]!==fromLocation[1]) ? (<a href="#" onClick={()=>{this.sendLocation()}} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#book">Đặt xe</a>):null}
+        <DriverReceived/>
+        {toLocation && <a href="#" onClick={()=>{this.sendLocation()}} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#book">Đặt xe</a>}
            <GrobMap driverLocation={this.state.driverLocation} setDisTime={this.setDisTime} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/>
            </div>
         );

@@ -22,7 +22,7 @@ class HomePage extends Component {
         console.log(isDriver);
         return (
           <Router>
-            <body style={{overflowX :"hidden"}} data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+            <body style={{overflowX :"hidden"}}>
             <div className="site-wrap"  id="home-section">
             <Header/>
             <Modals isDriver={isDriver} setIsDriver={this.setIsDriver}/>

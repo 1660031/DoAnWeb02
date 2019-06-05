@@ -22,9 +22,10 @@ class RoutingMachine extends MapLayer {
         goal,
     ],
       lineOptions: { styles: [{color: color,opacity:1}] },
-      createMarker: (i,wp) => { return L.marker(wp.latLng, {
-        draggable: false,
-        })},
+      // createMarker: (i,wp) => { return L.marker(wp.latLng, {
+      //   draggable: false,
+      //   })},
+      createMarker: (i,wp) => { return null},
       })
     .addTo(map.leafletElement).on('routesfound', function (e) {
       // distance = e.routes[0].summary.totalDistance;
