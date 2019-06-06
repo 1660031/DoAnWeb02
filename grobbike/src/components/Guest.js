@@ -51,11 +51,11 @@ setSocket = (socket) =>{
       else{
         console.log(res);
         this.setState({driverLocation : [res.location.lat,res.location.lng],driverInfo : res.info, driverID : res.id});
-        setTimeout(()=>{
-          var modal = document.getElementById('driverReceived');
-          modal.classList.add('show');
-          modal.style.display = 'block';
-          },1000);
+        // setTimeout(()=>{
+        //   var modal = document.getElementById('driverReceived');
+        //   modal.classList.add('show');
+        //   modal.style.display = 'block';
+        //   },1000);
         console.log("tai xe da nhan chuyen");
       }
    });
@@ -99,8 +99,9 @@ setSocket = (socket) =>{
         // console.log(distance);
         // if(this.state.driverLocation)var driverLocation = this.state.driverLocation;
         return (
-          <div style={{padding:"20px 20px 10px 20px",background:"black"}}>
-            <form action="#" method="get">
+         <div style={{padding:"20px 20px 10px 20px",background:"black"}}>
+          <div> {(driverInfo)  ? <DriverReceived distance={distance} driverInfo={driverInfo} driverID={driverID} /> 
+           : (<div><form action="#" method="get">
           <div className="form-group row">
             <div className="col-md-6">
               <input ref="phoneNumber" type="text" className="form-control" placeholder="Nhập số điện thoại" />
@@ -126,9 +127,10 @@ setSocket = (socket) =>{
            }} 
            key={key}>{value.display_name}</li>)
          }
-        </ul>}
-        {driverInfo && <DriverReceived distance={distance} driverInfo={driverInfo} driverID={driverID} />}
-        {toLocation && <a href="#" onClick={()=>{this.sendLocation()}} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#book">Đặt xe</a>}
+          </ul>}
+          {toLocation && <a href="#" onClick={()=>{this.sendLocation()}} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#book">Đặt xe</a>}
+          </div>) }
+          </div>
            <GuestMap driverLocation={this.state.driverLocation} setDisTime={this.setDisTime} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/>
            </div>
         );

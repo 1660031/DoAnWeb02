@@ -66,12 +66,12 @@ saveMap = (map) => {
         />
         <Marker  position={fromLocation}>
           <Popup>
-            Popup for any custom information.
+          Vị trí của bạn
           </Popup>
         </Marker>
         {driverLocation && <Marker icon={driverIcon} position={driverLocation}>
           <Popup>
-            Popup for any custom information.
+          Vị trí tài xế
           </Popup>
     </Marker>}        
         {(listDriver) && listDriver.map((value,key)=>
@@ -82,7 +82,7 @@ saveMap = (map) => {
         </Marker>)}
         {(toLocation) && <Marker icon={desIcon} position={toLocation}>
           <Popup>
-            Popup for any custom information.
+          Vị trí đến
           </Popup>
   </Marker>}
   {toLocation && isMapInit && <Routing  color="red" setDisTime={setDisTime} route={this.state.route} setRoute={this.setRoute} from={fromLocation} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}

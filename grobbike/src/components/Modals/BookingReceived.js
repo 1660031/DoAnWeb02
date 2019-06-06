@@ -56,7 +56,7 @@ class BookingReceived extends Component {
                   cancel();
                   this.hideModal();
                   }
-                  } type="button" style={{width: "100%"}} class="btn btn-danger">Hủy chuyến</button>
+                  } type="button" style={{width: "100%"}} class="btn btn-danger">Từ chối chuyến</button>
                     </div>
                   <div className="text-center">
                     <h1  style={{marginTop: "0.5rem"}} className="text-black">{this.state.time}s</h1>
@@ -66,7 +66,6 @@ class BookingReceived extends Component {
                   accept(()=>this.setState({isAccept : true }));
                   }
                   }type="button" style={{width: "100%"}} className="btn btn-success text-white">Nhận chuyến</button></div>
-                  
                 </div>}
                 {/* <GrobMap toLocation={toLocation} setToLocation={setToLocation} guestFromLocation= {guestFromLocation} guestToLocation={guestToLocation} fromLocation={toLocation}/> */}
                 <DriverMap   location={this.props.toLocation} guestFromLocation= {guestFromLocation} guestToLocation={guestToLocation} center={guestFromLocation}/>

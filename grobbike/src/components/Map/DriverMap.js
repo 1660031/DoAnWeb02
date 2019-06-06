@@ -69,17 +69,17 @@ saveMap = (map) => {
         {guestToLocation && guestFromLocation && <Routing  color="red" setRoute={this.setRoute} from={guestFromLocation} to={guestToLocation} map={this.map}/>}
   {guestToLocation && <Marker icon={desIcon} position={guestToLocation}>
           <Popup>
-            Popup for any custom information.
+          Vị trí trả khách
           </Popup>
   </Marker>}
   {guestFromLocation && <Marker icon={guestIcon} position={guestFromLocation}>
           <Popup>
-            Popup for any custom information.
+            Vị trí đón khách
           </Popup>
   </Marker>}
         {(toLocation) && <Marker icon={desIcon} position={toLocation}>
           <Popup>
-            Popup for any custom information.
+          Vị trí của bạn
           </Popup>
   </Marker>}
   {toLocation && isMapInit && <Routing  color="red" route={this.state.route} setRoute={this.setRoute} from={location} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
