@@ -120,7 +120,7 @@ io.on('connection',(socket=>{
               console.log("----------------");
               console.log(nearestLocation);
               // var fromLocation ={lat: 11.889189040934856, lng: 108.47917556762697};
-              listDriver.forEach((value,index)=> {if(value.location.lat === nearestLocation.location.lat && value.location.lng === nearestLocation.location.lng){driverId = index;}})
+              listDriver.forEach((value,index)=> {if(value.location && value.location.lat === nearestLocation.location.lat && value.location.lng === nearestLocation.location.lng){driverId = index;}})
               console.log("----------------");
               console.log(listDriver[driverId].id);
               io.sockets.emit(listDriver[driverId].id,{phoneNumber : passenger.id, fromLocation : passenger.fromLocation, toLocation : passenger.toLocation,distance: passenger.distance});
