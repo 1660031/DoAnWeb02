@@ -127,7 +127,6 @@ io.on('connection',(socket=>{
             }
             else{
               socket.emit("unavailable",{unavailable :true});
-
             }
           }
           else{
