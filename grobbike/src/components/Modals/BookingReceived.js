@@ -69,7 +69,7 @@ class BookingReceived extends Component {
                   
                 </div>}
                 {/* <GrobMap toLocation={toLocation} setToLocation={setToLocation} guestFromLocation= {guestFromLocation} guestToLocation={guestToLocation} fromLocation={toLocation}/> */}
-                <DriverMap location={this.props.toLocation} guestFromLocation= {guestFromLocation} guestToLocation={guestToLocation} center={guestFromLocation}/>
+                <DriverMap   location={this.props.toLocation} guestFromLocation= {guestFromLocation} guestToLocation={guestToLocation} center={guestFromLocation}/>
 
               </div>
               <div className="form-group row">
