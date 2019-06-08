@@ -82,7 +82,7 @@ var socketHandle = require('../socketHandle');
 require('events').EventEmitter.prototype._maxListeners = 20000;
 const maxListenersExceededWarning = require('max-listeners-exceeded-warning');
 maxListenersExceededWarning();
-var checkCancelList= (list,id) =>{
+var checkBlackList= (list,id) =>{
   var cancelId;
   if(list.length === 0) return false
   else{
@@ -98,7 +98,7 @@ var checkCancelList= (list,id) =>{
 }
 io.on('connection',(socket=>{
     console.log("Client Connected : "+socket.id)
-    socket.on('guest',(passenger)=>
+    socket.on('passenger',(passenger)=>
         {
           const currentArray = listDriver;
           var driverId;
@@ -108,8 +108,8 @@ io.on('connection',(socket=>{
           if(currentArray.length>0){
             var listDriverLocation =[];
             currentArray.forEach((value)=>{
-              console.log(checkCancelList(value.cancelList,passenger.id));
-              if(value.isAvailable === true && checkCancelList(value.cancelList,passenger.id)===false && value.location !==null)
+              console.log(checkBlackList(value.blackList,passenger.id));
+              if(value.isAvailable === true && checkBlackList(value.blackList,passenger.id)===false && value.location !==null)
               listDriverLocation.push(value.location);
             })
             if(listDriverLocation.length>0)
@@ -135,6 +135,7 @@ io.on('connection',(socket=>{
         })
     socket.on('driver_on',(info)=>
         {
+          console.log(info);
             var isExist = false;
             listDriver.forEach((element,index,arr) => {
               if(element.id === info.id)
@@ -147,7 +148,7 @@ io.on('connection',(socket=>{
             if(isExist === false) {
               console.log("chưa tồn tại, thêm vào!!!!!");
               info.isAvailable = true;
-              info.cancelList = [];
+              info.blackList = [];
               listDriver.push(info);}
             console.log(listDriver);
           }
@@ -160,16 +161,34 @@ io.on('connection',(socket=>{
           if(res.accept===true)
           {
             listDriver[index].isAvailable = false;
+            setTimeout(()=>io.sockets.emit(res.passenger,{id :listDriver[index].id ,accept :true,info : listDriver[index].info,location : listDriver[index].location}),500);
             var interval = setInterval(()=>{
               if(listDriver[index].isAvailable===true) clearInterval(interval);
-              else io.sockets.emit(res.guest,{id :listDriver[index].id ,info : listDriver[index].info,location : listDriver[index].location})}
+              else io.sockets.emit(res.passenger,{id :listDriver[index].id ,accept :true,info : listDriver[index].info,location : listDriver[index].location})}
               ,3000);
             console.log("đã nhan chuyen!!!!!")
           }
           else{
-            listDriver[index].cancelList.push(res.guest);
-            io.sockets.emit(res.guest,{cancel :"da huy chuyen"});
-            console.log("da huy chuyen");
+            listDriver[index].blackList.push(res.passenger);
+            io.sockets.emit(res.passenger,{accept :false});
+            console.log("da tu choi chuyen");
+          }
+        }
+      });
+      }
+    )
+    socket.on('complete',(res)=>{
+      console.log(res);
+      listDriver.forEach((element,index) => {
+        if(element.id === res.driver){ 
+          listDriver[index].isAvailable = true;
+          if(res.complete===true)
+          {
+            io.sockets.emit(res.passenger,{complete :true});
+          }
+          else{
+            io.sockets.emit(res.passenger,{complete :false});
+            listDriver[index].blackList.push(res.passenger);
           }
         }
       });
