@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from './Header';
-import Guest from './Guest';
+import Passenger from './Passenger';
 import Footer from './Footer';
 import Driver from './Driver';
 import Modals from './Modals';
@@ -27,7 +27,7 @@ class HomePage extends Component {
             <Header/>
             <Modals isDriver={isDriver} setIsDriver={this.setIsDriver}/>
             <Route path="/driver" component={Driver} />
-            <Route path="/" exact component={Guest} />
+            <Route path="/" exact component={Passenger} />
             <Footer/>
             </div>
             </body>

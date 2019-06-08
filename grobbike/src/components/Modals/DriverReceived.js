@@ -1,27 +1,33 @@
 import React, { Component } from 'react';
+import { timingSafeEqual } from 'crypto';
 
 class DriverReceived extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      time:0,
+    } 
+  }
     hideModal = () => {
         var modal = document.getElementById('driverReceived');
         modal.classList.toggle('show');
         modal.style.display = 'none';
       }
       startTimer = ()=>{
-        const {cancel} = this.props;
-          var i = 0 ;
           var interval = setInterval(()=>{
-            if(i===15) clearInterval(interval)
+            if(this.props.isComplete) clearInterval(interval)
               else{
-                this.setState({time:15 - ++i});
+                this.setState({time:this.state.time + 1});
               }},1000)
-              setTimeout(()=>{
-                if(this.state.isAccept !== true)
-                {this.hideModal();
-                cancel();}
-              },16000);
+      }
+      componentDidMount(){
+        this.startTimer();
       }
     render() {
-        const {driverInfo,driverID,distance} = this.props;
+        const {time}=this.state;
+        const {driverInfo,driverID,distance,isComplete} = this.props;
+        var hour = Math.floor(time/3600);
+        var minute = Math.floor(time/60);
         return (
           <div style={{height: "250px",background: "white",marginBottom: "20px",width: "50%",borderRadius:"20px"}} class="container text-black">
             <div class="row">
@@ -32,23 +38,24 @@ class DriverReceived extends Component {
             <p/>
             <p>Biển số: {driverInfo.bikeNumber}</p>
             <p/>
-            <p>Quãng đường:{distance} KM</p>
+            <p>Quãng đường: {distance} KM</p>
             <p/>
             <p>Giá cước: {distance * 2000} VNĐ</p>
           </div>
           <div style={{right:"35px"}} className="col-4 text-center">
-        <h4 style={{color:"black",margin:"10px"}}>{driverID}</h4>
-        <img style={{width:"80%",height:"90%"}} src="https://placebeard.it/640x360" class="rounded-circle" alt="Cinque Terre"/>
+        <h4 style={{color:"#26337b",fontWeight:"bold",margin:"10px"}}>{driverID}</h4>
+        <img style={{width:"80%",height:"85%",marginBottom:"20px"}} src="https://placebeard.it/640x360" class="rounded-circle" alt="Cinque Terre"/>
           </div>
-          <div style={{right:"20px",top:"50px"}} className="col-4 text-center">
+          <div style={{right:"20px",top:"40px"}} className="col-4 text-center">
                 <div>
-                  <button type="button" style={{width: "100%"}} class="btn btn-danger">Hủy chuyến</button>
+                  <button type="button" style={{width: "106%",color:"#dd6b4d",fontWeight:"900",fontSize:"1.2rem"}} class="btn btn-outline-light">{isComplete ? "CHUYẾN ĐI ĐÃ KẾT THÚC" : "GROB"}</button>
                     </div>
-                  <div style={{margin: "33px"}} className="text-center">
-                    <h1 className="text-black">00:00:00</h1>
+                  <div style={{margin: "13px 0px"}} className="text-center">
+                  <h1  style={{fontSize: "4.5rem"}} className="text-black">{hour > 9 ? hour : ('0' + hour)}:{(minute - hour*60)>9 ? (minute - hour*60) : ('0' + (minute - hour*60)) }:{(time - minute*60)>9 ? (time - minute*60) : ('0' + (time - minute*60)) }</h1>
                 </div>
                 <div>
-                  <button type="button" style={{width: "100%"}} className="btn btn-success text-white">Hoàn thành chuyến</button></div>
+                 {isComplete ? <button type="button" style={{width: "106%"}} className="btn btn-success text-white">Hoàn thành chuyến</button> : <button type="button" style={{width: "106%",color:"#dd6b4d",fontWeight:"900",fontSize:"1.2rem"}} class="btn btn-outline-light">THƯỢNG LỘ BÌNH AN</button>}
+                 </div>
           </div>
             </div>
           </div>

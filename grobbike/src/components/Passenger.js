@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import GuestMap from './Map/GuestMap'
+import PassMap from './Map/PassMap'
 import io from 'socket.io-client'
 import DriverReceived from './Modals/DriverReceived'
 
 import * as api from './Api'
-class Guest extends Component {
+class Passenger extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +22,7 @@ class Guest extends Component {
       route:null,
       distance:0,
       time:0,
-      socket : null,
+      isComplete:null,
     }
     this.socket =io('http://localhost:8080/');
     this.socket.on('private',(res)=>{
@@ -36,28 +36,33 @@ class Guest extends Component {
 setDisTime = (dis,time) => {
   this.setState({distance:dis,time:time})
 }
-setSocket = (socket) =>{
-  this.setState({socket});
-}
   sendLocation = () => {
     const {phoneNumber}=this.refs;
     const {fromLocation,toLocation,distance}=this.state;
     const info={id:phoneNumber.value, fromLocation:{lat : fromLocation[0], lng : fromLocation[1]},toLocation : toLocation,distance : distance};
-    this.socket.emit('guest',info);
+    this.socket.emit('passenger',info);
     this.socket.on(phoneNumber.value,(res)=>{
-      if(res.cancel){
-        console.log("tai xe da huy chuyen");
+      if(res.accept){
+        if(res.accept === false){
+          alert("vui lòng thử lại");
+          // setTimeout(()=>this.socket.emit('passenger',info),1000);
+        }
+        else if(res.accept === true){
+          console.log(res);
+          this.setState({driverLocation : [res.location.lat,res.location.lng],driverInfo : res.info, driverID : res.id});
+          console.log("tai xe da nhan chuyen");
+        }
       }
-      else{
-        console.log(res);
-        this.setState({driverLocation : [res.location.lat,res.location.lng],driverInfo : res.info, driverID : res.id});
-        // setTimeout(()=>{
-        //   var modal = document.getElementById('driverReceived');
-        //   modal.classList.add('show');
-        //   modal.style.display = 'block';
-        //   },1000);
-        console.log("tai xe da nhan chuyen");
+      else {
+        if(res.complete === true){
+          // alert("đã hoàn thành chuyến");
+          this.setState({isComplete:true});
       }
+      else if(res.complete === false){
+        // alert("tài xế đã hủy chuyến");
+        this.setState({isComplete:false});
+      }
+    }
    });
    this.socket.on("unavailable",(res)=>{
     alert("Vui lòng thử lại!!!");
@@ -93,14 +98,14 @@ setSocket = (socket) =>{
 }
       render() {
         const {address,phoneNumber}=this.refs;
-        const {driverInfo,driverID,distance,listSearch,fromLocation,toLocation} = this.state;
+        const {driverInfo,driverID,distance,listSearch,fromLocation,toLocation,isComplete} = this.state;
         // console.log(fromLocation);
         // console.log(toLocation);
         // console.log(distance);
         // if(this.state.driverLocation)var driverLocation = this.state.driverLocation;
         return (
          <div style={{padding:"20px 20px 10px 20px",background:"black"}}>
-          <div> {(driverInfo)  ? <DriverReceived distance={distance} driverInfo={driverInfo} driverID={driverID} /> 
+          <div> {(driverInfo)  ? <DriverReceived ref="passengerModal" isComplete={isComplete} distance={distance} driverInfo={driverInfo} driverID={driverID} /> 
            : (<div><form action="#" method="get">
           <div className="form-group row">
             <div className="col-md-6">
@@ -131,10 +136,10 @@ setSocket = (socket) =>{
           {toLocation && <a href="#" onClick={()=>{this.sendLocation()}} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#book">Đặt xe</a>}
           </div>) }
           </div>
-           <GuestMap driverLocation={this.state.driverLocation} setDisTime={this.setDisTime} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/>
+           <PassMap driverLocation={this.state.driverLocation} setDisTime={this.setDisTime} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/>
            </div>
         );
     }
 }
 
-export default Guest;
+export default Passenger;

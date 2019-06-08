@@ -5,8 +5,8 @@ import L from 'leaflet'
 import 'leaflet'
 import des from  '../Images/des.png'
 import driver from  '../Images/Driver.png'
-import guest from  '../Images/guest.jpg'
-class GuestMap extends React.Component {
+
+class PassMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,11 +20,11 @@ class GuestMap extends React.Component {
     this.setState({route})
 }
   addToMarker = (e) => {
-    var {toLocation,setToLocation}=this.props;
-    if(setToLocation) this.props.setToLocation(null);
+    var {toLocation,driverLocation}=this.props;
+    !driverLocation && this.props.setToLocation(null);
     toLocation = e.latlng;
     // api.getAddress(e.latlng["lat"],e.latlng["lng"],this.props.setToAddress);
-    if(setToLocation) this.props.setToLocation(toLocation);
+    !driverLocation && this.props.setToLocation(toLocation);
   }
 
 saveMap = (map) => {
@@ -32,11 +32,6 @@ saveMap = (map) => {
   this.setState({isMapInit:true});
 }
   render() {
-    var guestIcon = L.icon({
-      iconUrl: guest,
-      iconSize:[41, 49], // size of the icon
-      iconAnchor:   [19, 44],
-    });
     var desIcon = L.icon({
       iconUrl: des,
       iconSize:[50, 49], // size of the icon
@@ -85,9 +80,9 @@ saveMap = (map) => {
           Vị trí đến
           </Popup>
   </Marker>}
-  {toLocation && isMapInit && <Routing  color="red" setDisTime={setDisTime} route={this.state.route} setRoute={this.setRoute} from={fromLocation} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
+  {!driverLocation && toLocation && isMapInit && <Routing  color="red" setDisTime={setDisTime} route={this.state.route} setRoute={this.setRoute} from={fromLocation} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
       </LeafletMap>
     );
   }
 }
-export default GuestMap;
+export default PassMap;

@@ -31,7 +31,7 @@ saveMap = (map) => {
   this.setState({isMapInit:true});
 }
   render() {
-    var guestIcon = L.icon({
+    var passIcon = L.icon({
       iconUrl: guest,
       iconSize:[41, 49], // size of the icon
       iconAnchor:   [19, 44],
@@ -41,12 +41,7 @@ saveMap = (map) => {
       iconSize:[50, 49], // size of the icon
       iconAnchor:   [26, 43],
     });
-  var driverIcon = L.icon({
-    iconUrl: driver,
-    iconSize:[25, 41], // size of the icon
-    iconAnchor:   [21, 54],
-  });
-    const {toLocation,center,location,guestToLocation,guestFromLocation,setDisTime} = this.props;
+    const {toLocation,center,location,passToLocation,passFromLocation,setDisTime} = this.props;
     console.log("driver location : ");
     const {isMapInit} = this.state;
     console.log(toLocation);
@@ -66,13 +61,13 @@ saveMap = (map) => {
             Popup for any custom information.
           </Popup>
         </Marker>
-        {guestToLocation && guestFromLocation && <Routing  color="red" setRoute={this.setRoute} from={guestFromLocation} to={guestToLocation} map={this.map}/>}
-  {guestToLocation && <Marker icon={desIcon} position={guestToLocation}>
+        {passToLocation && passFromLocation && <Routing  color="red" setRoute={this.setRoute} from={passFromLocation} to={passToLocation} map={this.map}/>}
+  {passToLocation && <Marker icon={desIcon} position={passToLocation}>
           <Popup>
           Vị trí trả khách
           </Popup>
   </Marker>}
-  {guestFromLocation && <Marker icon={guestIcon} position={guestFromLocation}>
+  {passFromLocation && <Marker icon={passIcon} position={passFromLocation}>
           <Popup>
             Vị trí đón khách
           </Popup>
