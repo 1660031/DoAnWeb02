@@ -1,7 +1,37 @@
-import React, { Component } from 'react';
+import React, { Component,Fragment } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { logoutUser } from "../actions/authActions";
+
 class Header extends Component {
+  onLogoutClick = e => {
+    e.preventDefault();
+    this.props.logoutUser();
+  };
     render() {
+      const { isAuthenticated, user } = this.props.auth;
+
+      const loginHead = (
+        <Fragment>
+          <span>
+            <strong style={{marginRight: '20px'}} >{user ? `Chào ${user.name}` : ''}</strong>
+          </span>
+          <button
+              onClick={this.onLogoutClick}
+              className="btn btn-primary">
+              Logout
+            </button>
+      </Fragment>
+      );
+
+      const guestHead = (
+        <Fragment>
+          <a href="/login" style={{marginRight: '20px'}}>Đăng nhập</a>
+          <a href="/signup" className="btn btn-primary">Đăng ký</a>
+
+      </Fragment>
+      );
         return (
             <header className="site-navbar js-sticky-header site-navbar-target" role="banner">
             <div className="container">
@@ -17,8 +47,7 @@ class Header extends Component {
                   </nav>
                 </div>
                 <div className="toggle-button align-items-center d-flex">
-                  <a data-toggle="modal" data-target="#signIn" href="#" style={{marginRight: '20px'}}>Đăng nhập</a>
-                  <a data-toggle="modal" data-target="#signUp" href="#" className="btn btn-primary">Đăng ký</a>
+                  {isAuthenticated ? loginHead : guestHead}
                 </div>
               </div>
             </div>
