@@ -11,7 +11,6 @@ class Passenger extends Component {
       phoneNumber:null,
       listSearch:null,
       selectedAddressIndex : null,
-      listenLocation:null,
       fromAddress : null,
       toAddress: null,
       fromLocation : null,
@@ -19,19 +18,12 @@ class Passenger extends Component {
       driverInfo :null,
       driverID: null,
       driverLocation : null,
-      route:null,
       distance:0,
       time:0,
       isComplete:null,
     }
     this.socket =io('http://localhost:8080/');
-    this.socket.on('private',(res)=>{
-
-      console.log(res)
-    // var toLocation = this.props.toLocation;
-    // if(toLocation) this.props.setToLocation(null);
-    // else this.state.setToLocation(location[0].location);
-    })
+    
 }
 setDisTime = (dis,time) => {
   this.setState({distance:dis,time:time})
@@ -41,6 +33,10 @@ setDisTime = (dis,time) => {
     const {fromLocation,toLocation,distance}=this.state;
     const info={id:phoneNumber.value, fromLocation:{lat : fromLocation[0], lng : fromLocation[1]},toLocation : toLocation,distance : distance};
     this.socket.emit('passenger',info);
+    this.socket.on('list_location',(res)=>{
+      console.log(res)
+    })
+    var driverCame = false;
     this.socket.on(phoneNumber.value,(res)=>{
       if(res.accept){
         if(res.accept === false){
@@ -49,17 +45,23 @@ setDisTime = (dis,time) => {
         }
         else if(res.accept === true){
           console.log(res);
+          if(res.location.lat === this.state.fromLocation[0] && res.location.lng === this.state.fromLocation[1]) driverCame = true;
+          if(driverCame===true)
+          {
+            this.setState({fromLocation : [res.location.lat,res.location.lng],driverInfo : res.info, driverID : res.id});
+          }
+          console.log(driverCame);
           this.setState({driverLocation : [res.location.lat,res.location.lng],driverInfo : res.info, driverID : res.id});
           console.log("tai xe da nhan chuyen");
         }
-      }
+      } 
       else {
         if(res.complete === true){
-          // alert("đã hoàn thành chuyến");
+          alert("đã hoàn thành chuyến, xin cảm ơn quý khách !!!!!");
           this.setState({isComplete:true});
       }
       else if(res.complete === false){
-        // alert("tài xế đã hủy chuyến");
+        alert("tài xế đã hủy chuyến");
         this.setState({isComplete:false});
       }
     }
@@ -99,10 +101,6 @@ setDisTime = (dis,time) => {
       render() {
         const {address,phoneNumber}=this.refs;
         const {driverInfo,driverID,distance,listSearch,fromLocation,toLocation,isComplete} = this.state;
-        // console.log(fromLocation);
-        // console.log(toLocation);
-        // console.log(distance);
-        // if(this.state.driverLocation)var driverLocation = this.state.driverLocation;
         return (
          <div style={{padding:"20px 20px 10px 20px",background:"black"}}>
           <div> {(driverInfo)  ? <DriverReceived ref="passengerModal" isComplete={isComplete} distance={distance} driverInfo={driverInfo} driverID={driverID} /> 

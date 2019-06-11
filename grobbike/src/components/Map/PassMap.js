@@ -31,6 +31,10 @@ saveMap = (map) => {
   this.map = map;
   this.setState({isMapInit:true});
 }
+componentDidMount(){
+  if(this.props.toLocation === null) this.setState({route:null});
+
+}
   render() {
     var desIcon = L.icon({
       iconUrl: des,
@@ -40,9 +44,10 @@ saveMap = (map) => {
   var driverIcon = L.icon({
     iconUrl: driver,
     iconSize:[25, 41], // size of the icon
-    iconAnchor:   [21, 54],
+    iconAnchor:   [12, 50],
   });
-    const {driverLocation,toLocation,fromLocation,setDisTime} = this.props;
+    const {driverLocation,toLocation,fromLocation,setDisTime,} = this.props;
+    console.log(this.props.driverCame);
     console.log("driver location : ");
     console.log(driverLocation);
     const {listDriver,isMapInit} = this.state;
@@ -54,12 +59,14 @@ saveMap = (map) => {
         center={fromLocation}
         zoom={13}
         minZoom={13}
+        maxZoom={13}
+
         onClick={this.addToMarker}
       >
         <TileLayer
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker  position={fromLocation}>
+        <Marker  position={this.props.fromLocation}>
           <Popup>
           Vị trí của bạn
           </Popup>
@@ -81,6 +88,8 @@ saveMap = (map) => {
           </Popup>
   </Marker>}
   {!driverLocation && toLocation && isMapInit && <Routing  color="red" setDisTime={setDisTime} route={this.state.route} setRoute={this.setRoute} from={fromLocation} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
+
+  {driverLocation && fromLocation[0]===driverLocation[0] && fromLocation[1]===driverLocation[1] && isMapInit && <Routing  color="red" setDisTime={setDisTime} route={this.state.route} setRoute={this.setRoute} from={this.props.fromLocation} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
       </LeafletMap>
     );
   }

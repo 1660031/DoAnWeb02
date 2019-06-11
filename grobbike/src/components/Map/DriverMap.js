@@ -42,7 +42,7 @@ saveMap = (map) => {
       iconAnchor:   [26, 43],
     });
     const {toLocation,center,location,passToLocation,passFromLocation,setDisTime} = this.props;
-    console.log("driver location : ");
+    console.log(passFromLocation);
     const {isMapInit} = this.state;
     console.log(toLocation);
     return (
@@ -51,6 +51,7 @@ saveMap = (map) => {
         center={center}
         zoom={13}
         minZoom={13}
+        maxZoom={13}
         onClick={this.addToMarker}
       >
         <TileLayer
@@ -61,7 +62,8 @@ saveMap = (map) => {
             Popup for any custom information.
           </Popup>
         </Marker>
-        {passToLocation && passFromLocation && <Routing  color="red" setRoute={this.setRoute} from={passFromLocation} to={passToLocation} map={this.map}/>}
+       
+
   {passToLocation && <Marker icon={desIcon} position={passToLocation}>
           <Popup>
           Vị trí trả khách
@@ -78,7 +80,10 @@ saveMap = (map) => {
           </Popup>
   </Marker>}
   {toLocation && isMapInit && <Routing  color="red" route={this.state.route} setRoute={this.setRoute} from={location} to={[toLocation.lat,toLocation.lng]} map={this.map}/>}
+  
+  {passFromLocation && passFromLocation[0] !== location.lat && isMapInit && <Routing  color="red"  route={this.state.route} setRoute={this.setRoute}setDisTime={setDisTime}  from={this.props.passFromLocation} to={passToLocation} map={this.map}/>}
 
+  {location && passFromLocation && passToLocation && passFromLocation[0] === location.lat && passFromLocation[1] === location.lng && passToLocation && isMapInit &&<Routing  color="red"route={this.state.route} setRoute={this.setRoute} from={this.props.passFromLocation} to={passToLocation} map={this.map}/>}
       </LeafletMap>
     );
   }

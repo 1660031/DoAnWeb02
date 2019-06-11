@@ -10,7 +10,6 @@ class DriverReceived extends Component {
   }
     hideModal = () => {
         var modal = document.getElementById('driverReceived');
-        modal.classList.toggle('show');
         modal.style.display = 'none';
       }
       startTimer = ()=>{
@@ -26,10 +25,11 @@ class DriverReceived extends Component {
     render() {
         const {time}=this.state;
         const {driverInfo,driverID,distance,isComplete} = this.props;
+        if(isComplete) setTimeout(()=>window.location.href = "/",5000);
         var hour = Math.floor(time/3600);
         var minute = Math.floor(time/60);
         return (
-          <div style={{height: "250px",background: "white",marginBottom: "20px",width: "50%",borderRadius:"20px"}} class="container text-black">
+          <div  id="driverReceived" style={{height: "250px",background: "white",marginBottom: "20px",width: "50%",borderRadius:"20px"}} class="container text-black">
             <div class="row">
             <div style={{top: "40px",left:"2%"}} className="col-4">
             <p>Họ tên: {driverInfo.name}</p>
@@ -54,7 +54,7 @@ class DriverReceived extends Component {
                   <h1  style={{fontSize: "4.5rem"}} className="text-black">{hour > 9 ? hour : ('0' + hour)}:{(minute - hour*60)>9 ? (minute - hour*60) : ('0' + (minute - hour*60)) }:{(time - minute*60)>9 ? (time - minute*60) : ('0' + (time - minute*60)) }</h1>
                 </div>
                 <div>
-                 {isComplete ? <button type="button" style={{width: "106%"}} className="btn btn-success text-white">Hoàn thành chuyến</button> : <button type="button" style={{width: "106%",color:"#dd6b4d",fontWeight:"900",fontSize:"1.2rem"}} class="btn btn-outline-light">THƯỢNG LỘ BÌNH AN</button>}
+                 {isComplete === true ? <button onClick={()=>setTimeout(()=>window.location.href = "/",2000)}type="button" style={{width: "106%"}} className="btn btn-success text-white">Hoàn thành chuyến</button> : <button type="button" style={{width: "106%",color:"#dd6b4d",fontWeight:"900",fontSize:"1.2rem"}} class="btn btn-outline-light">THƯỢNG LỘ BÌNH AN</button>}
                  </div>
           </div>
             </div>

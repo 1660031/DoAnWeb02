@@ -12,14 +12,14 @@ class RoutingMachine extends MapLayer {
     // });
     
     const {setDisTime,map, from,to,route,color } = this.props;
-    console.log(to);
-    var start = L.latLng(from[0],from[1]);
-    var goal = L.latLng(to[0],to[1]);
+    console.log(from);
+    // var start =L.latLng(this.props.from[0],this.props.from[1]);
+    // var goal = L.latLng(to[0],to[1]);
     if (route) route.remove(map);
     let leafletElement = L.Routing.control({
       waypoints: [
-        start,
-        goal,
+        L.latLng(this.props.from[0],this.props.from[1]),
+        L.latLng(to[0],to[1]),
     ],
       lineOptions: { styles: [{color: color,opacity:1}] },
       // createMarker: (i,wp) => { return L.marker(wp.latLng, {

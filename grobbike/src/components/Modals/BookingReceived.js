@@ -81,6 +81,7 @@ class BookingReceived extends Component {
                 <div>
                   <button onClick={()=>{
                     cancel();
+                    this.hideModal();
                   }
                   } type="button" style={{width: "100%"}} class="btn btn-danger">Hủy chuyến</button>
                   
@@ -92,12 +93,12 @@ class BookingReceived extends Component {
                   <button onClick={()=>{
                   complete();
                   this.setState({isComplete : true });
+                  setTimeout(()=>this.hideModal(),1000)
                   }
                   }type="button" style={{width: "100%"}} className="btn btn-success text-white">Hoàn thành chuyến</button></div>
                 </div>}
                 {/* <GrobMap toLocation={toLocation} setToLocation={setToLocation} passFromLocation= {passFromLocation} passToLocation={passToLocation} fromLocation={toLocation}/> */}
-                <DriverMap   location={this.props.toLocation} passFromLocation= {passFromLocation} passToLocation={passToLocation} center={passFromLocation}/>
-
+                <DriverMap location={this.props.toLocation}  passFromLocation= {this.props.passFromLocation} passToLocation={passToLocation} center={passFromLocation}/>
               </div>
               <div className="form-group row">
                 <div className="col-6 ml-auto">
