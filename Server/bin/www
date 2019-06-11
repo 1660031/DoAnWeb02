@@ -96,6 +96,7 @@ var checkBlackList= (list,id) =>{
     return cancelId===id;
   }
 }
+
 io.on('connection',(socket=>{
     console.log("Client Connected : "+socket.id)
     socket.on('passenger',(passenger)=>
@@ -114,9 +115,10 @@ io.on('connection',(socket=>{
             })
             if(listDriverLocation.length>0)
             {
+              socket.emit("list_location",{listDriver :listDriverLocation});
               console.log("list: "+ listDriverLocation);
               // const nearestLocation = findNearestLocation(passenger.fromLocation, listDriverLocation);
-              const nearestLocation = findNearestLocation(passenger.toLocation, listDriverLocation);
+              const nearestLocation = findNearestLocation(passenger.fromLocation, listDriverLocation);
               console.log("----------------");
               console.log(nearestLocation);
               // var fromLocation ={lat: 11.889189040934856, lng: 108.47917556762697};
@@ -165,7 +167,7 @@ io.on('connection',(socket=>{
             var interval = setInterval(()=>{
               if(listDriver[index].isAvailable===true) clearInterval(interval);
               else io.sockets.emit(res.passenger,{id :listDriver[index].id ,accept :true,info : listDriver[index].info,location : listDriver[index].location})}
-              ,3000);
+              ,1500);
             console.log("đã nhan chuyen!!!!!")
           }
           else{
