@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from './Header';
-import Guest from './Guest';
+import Passenger from './Passenger';
 import Footer from './Footer';
 import Driver from './Driver';
 import Modals from './Modals';

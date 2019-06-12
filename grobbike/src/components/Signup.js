@@ -18,7 +18,7 @@ class Signup extends Component {
       gender: "",
       typeBike: "",
       bsxe: "",
-      imageProduct: "",
+      //imageProduct: "",
       errors: {}
     };
   }
@@ -37,7 +37,7 @@ componentWillReceiveProps(nextProps) {
     }
   }
 
-fileSelectedHandler = event =>{
+/* fileSelectedHandler = event =>{
   this.setState({
     imageProduct: event.target.files[0]
   })
@@ -55,7 +55,7 @@ fileUploadHandler = event =>{
       console.log(res);
     });
 
-}
+} */
 
 
 onChange = e => {
@@ -72,7 +72,7 @@ onSubmit = e => {
       password2: this.state.password2,
       typeBike: this.state.typeBike,
       bsxe: this.state.bsxe,
-      imageProduct: this.state.imageProduct.files[0],
+      //imageProduct: this.state.imageProduct.files[0],
       activeUser: false,
       isAdmin: false
     };
@@ -191,10 +191,10 @@ return (
                   type="text" placeholder="Nhập biển số xe" />
         </div>
       </div>
-                      <strong>
+                      {/* <strong>
                         <span className="text-danger">
                         </span>
-                      </strong>
+                      </strong> */}
 
       {/* <div className="form-group row">
         <div className="col-md-12">
