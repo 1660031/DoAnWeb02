@@ -33,30 +33,33 @@ if (localStorage.jwtToken) {
 }
 
 
-
 class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          isDriver:null,
+          driverInfo : null,
         }
     }
-    setIsDriver = (isDriver) =>{
-      this.setState({isDriver});
+    setInfo = (driverInfo) =>{
+      console.log("set Info")
+      this.setState({driverInfo});
     }
     render() {
-        const {isDriver} =this.state;
-        console.log(isDriver);
+      console.log(this.state.driverInfo);
+        const {driverInfo} =this.state;
         return (
           <Provider store={store}>
             <Router>
               <body style={{overflowX :"hidden"}}>
               <div className="site-wrap"  id="home-section">
               <Header/>
-              <Modals isDriver={isDriver} setIsDriver={this.setIsDriver}/>
-              <Route path="/driver" component={Driver} />
+              <Modals/>
+              {/* <Route path="/driver" ref={this.driver} exact component={Driver} /> */}
+              <Route path="/driver" ref={this.driver} exact render={(props) => <Driver {...props} info={driverInfo} />}  />
               <Route path="/" exact component={Passenger} />
-              <Route path="/login" exact component={Login} />
+              <Route path="/login" exact
+                render={(props) => <Login {...props} setInfo={this.setInfo} />} 
+                />
               <Route path="/signup" exact component={Signup} />
               <Switch>
                 <PrivateRoute exact path="/Header" component={Header} />

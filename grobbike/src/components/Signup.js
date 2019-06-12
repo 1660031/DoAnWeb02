@@ -84,7 +84,7 @@ return (
   <div className="container">
   <div className="col-md-8 mx-auto">
     <h1 className="text-center mb-5">ĐĂNG KÝ</h1>
-    <form enctype="multipart/form-data" action = "api/users" onSubmit={this.onSubmit}  >
+    <form enctype="multipart/form-data" onSubmit={this.onSubmit}  >
       <div className="form-group row">
         <div className="col-md-12">
                       <strong>
