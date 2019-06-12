@@ -38,12 +38,7 @@ class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          driverInfo : null,
         }
-    }
-    setInfo = (driverInfo) =>{
-      console.log("set Info")
-      this.setState({driverInfo});
     }
     render() {
       console.log(this.state.driverInfo);
@@ -56,7 +51,7 @@ class HomePage extends Component {
               <Header/>
               <Modals/>
               {/* <Route path="/driver" ref={this.driver} exact component={Driver} /> */}
-              <Route path="/driver" ref={this.driver} exact render={(props) => <Driver {...props} info={driverInfo} />}  />
+              <Route path="/driver" ref={this.driver} exact render={(props) => <Driver {...props}/>}  />
               <Route path="/" exact component={Passenger} />
               <Route path="/login" exact
                 render={(props) => <Login {...props} setInfo={this.setInfo} />} 

@@ -22,7 +22,7 @@ class Passenger extends Component {
       time:0,
       isComplete:null,
     }
-    this.socket =io('http://localhost:8080/');
+    this.socket =io('http://localhost:5000/');
     
 }
 setDisTime = (dis,time) => {
@@ -103,7 +103,7 @@ setDisTime = (dis,time) => {
         const {driverInfo,driverID,distance,listSearch,fromLocation,toLocation} = this.state;
         return (
          <div style={{padding:"20px 20px 10px 20px",background:"black"}}>
-          <div> {(driverInfo)  ? <DriverReceived ref="passengerModal" isComplete={this.state.isComplete} distance={distance} driverInfo={driverInfo} driverID={driverID} /> 
+          <div> {(driverID)  ? <DriverReceived ref="passengerModal" isComplete={this.state.isComplete} distance={distance} driverInfo={driverInfo} driverID={driverID} /> 
            : (<div><form action="#" method="get">
           <div className="form-group row">
             <div className="col-md-6">
