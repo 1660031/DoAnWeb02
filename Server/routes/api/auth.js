@@ -8,7 +8,11 @@ const auth = require('../../middleware/auth');
 const validateLoginInput = require("../../validation/login");
 // Load User model
 const User = require("../../models/User");
-
+var io = require('socket.io')(server)
+var arr_pos=[];
+router.get('/', function(req, res, next) {
+ 
+});
 
 // @route POST api/auth
 // @desc auth user
@@ -35,8 +39,13 @@ router.post("/", (req, res) => {
           // User matched
           // Create JWT Payload
           const payload = {
-            id: user.id,
-            name: user.name
+            sdt: user.sdt,
+            name: user.name,
+            gender: user.gender,
+            typeBike: user.typeBike,
+            bsxe: user.bsxe,
+            isAdmin: user.isAdmin,
+            activeUser: user.activeUser
           };
   // Sign token
           jwt.sign(
