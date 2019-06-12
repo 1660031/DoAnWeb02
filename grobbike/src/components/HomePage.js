@@ -17,6 +17,7 @@ import PrivateRoute from "./private-route/PrivateRoute";
 
 
 if (localStorage.jwtToken) {
+
   // Set auth token header auth
   const token = localStorage.jwtToken;
   setAuthToken(token);

@@ -3,6 +3,7 @@ import io from 'socket.io-client'
 import DriverMap from './Map/DriverMap'
 import BookingReceived from './Modals/BookingReceived'
 import Switch from './Switch'
+import { connect } from "react-redux";
 
 import { timingSafeEqual } from 'crypto';
 class Driver extends Component {
@@ -36,12 +37,12 @@ class Driver extends Component {
     console.log("accept");
     this.setState({isOn:false});
     setIsAccept();
-    this.socket.emit('confirm',{id : info.sdt ,accept:true,passenger: this.state.passPhoneNumber});
+    this.socket.emit('confirm',{id : info.id ,accept:true,passenger: this.state.passPhoneNumber});
     var i = 0;
           var interval = setInterval(()=>
           {
             if(i === arrayLocationDemo.length) {
-              this.socket.emit('driver_on',{id :info.sdt ,location:{lat: this.state.passToLocation[0],lng : this.state.passToLocation[1]},info : this.state.info});
+              this.socket.emit('driver_on',{id :info.id ,location:{lat: this.state.passToLocation[0],lng : this.state.passToLocation[1]},info : this.state.info});
               this.setState({passFromLocation : this.state.passToLocation,toLocation:this.state.passToLocation});
 
               clearInterval(interval);}
@@ -50,7 +51,7 @@ class Driver extends Component {
               if(driverCame===true)
               this.setState({passFromLocation : [arrayLocationDemo[i].lat,arrayLocationDemo[i].lng]});
 
-              this.socket.emit('driver_on',{id :info.sdt ,location:arrayLocationDemo[i],info : this.state.info});
+              this.socket.emit('driver_on',{id :info.id ,location:arrayLocationDemo[i],info : this.state.info});
               this.setState({toLocation :arrayLocationDemo[i++]});
           }
           }
@@ -59,17 +60,19 @@ class Driver extends Component {
   complete = () =>{
     const {info}=this.props;
     console.log("complete");
-    this.socket.emit('complete',{driver :info.sdt ,complete :true,passenger: this.state.passPhoneNumber});
+    this.socket.emit('complete',{driver :info.id ,complete :true,passenger: this.state.passPhoneNumber});
+    alert("Chuyến đi đã hoàn thành!!!");
+    setTimeout(()=>window.location.href = "/driver",2000);
   }
   cancel = () =>{
     const {info}=this.props;
     console.log("cancel");
-    this.socket.emit('complete',{driver :info.sdt,complete :false,passenger: this.state.passPhoneNumber});
+    this.socket.emit('complete',{driver :info.id,complete :false,passenger: this.state.passPhoneNumber});
   }
   refuse = () =>{
     const {info}=this.props;
     console.log("refuse");
-    this.socket.emit('confirm',{id :info.sdt ,accept:false,passenger: this.state.passPhoneNumber});
+    this.socket.emit('confirm',{id :info.id ,accept:false,passenger: this.state.passPhoneNumber});
   }
   sendLocation = () => {
     console.log("sendddddd");
@@ -77,15 +80,15 @@ class Driver extends Component {
     const {driverModal}=this.refs;
     const {toLocation,location} = this.state;
     var fakeLocation ={lat: 11.889189040934856, lng: 108.47917556762697};
-    this.socket.emit('driver_on',{id : info.sdt ,location:this.state.toLocation,info : this.state.info});
+    this.socket.emit('driver_on',{id : info.id ,location:this.state.toLocation,info : this.state.info});
     this.setState({isOn:true});
 
     var interval = setInterval(()=>{
       console.log(this.state.isOn)
       if(this.state.isOn === false) clearInterval(interval);
-      this.socket.emit('driver_on',{id : info.sdt,location:this.state.toLocation,info : this.state.info})},3000);
+      this.socket.emit('driver_on',{id : info.id,location:this.state.toLocation,info : this.state.info})},3000);
     // setInterval(()=>this.socket.emit('driver_on',{id :"driver001" ,location:{lat : location[0],lng : location[1]}}),10000);
-    this.socket.on("driver01" ,(info)=>{
+    this.socket.on(info.id ,(info)=>{
       console.log(info);
           this.setState({
             distance : info.distance ,
@@ -109,7 +112,9 @@ class Driver extends Component {
     else this.setState({toLocation: location});
   }
   componentDidMount() {
-    // window.onbeforeunload=this.socket.emit('driver_on',{id :this.state.id,location:null});
+    const {info} = this.props;
+
+    window.onbeforeunload=this.socket.emit('driver_on',{id :info.id,location:null});
     navigator.geolocation.watchPosition((pos)=>{
       this.setState({
         location:[pos.coords.latitude,pos.coords.longitude],
@@ -139,5 +144,9 @@ setIsOn =() =>{
         );
     }
 }
-
-export default Driver;
+const mapStateToProps = state => ({
+  info: state.auth.user
+});
+export default connect(
+  mapStateToProps,
+)(Driver);

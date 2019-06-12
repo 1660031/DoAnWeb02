@@ -100,10 +100,10 @@ setDisTime = (dis,time) => {
 }
       render() {
         const {address,phoneNumber}=this.refs;
-        const {driverInfo,driverID,distance,listSearch,fromLocation,toLocation,isComplete} = this.state;
+        const {driverInfo,driverID,distance,listSearch,fromLocation,toLocation} = this.state;
         return (
          <div style={{padding:"20px 20px 10px 20px",background:"black"}}>
-          <div> {(driverInfo)  ? <DriverReceived ref="passengerModal" isComplete={isComplete} distance={distance} driverInfo={driverInfo} driverID={driverID} /> 
+          <div> {(driverInfo)  ? <DriverReceived ref="passengerModal" isComplete={this.state.isComplete} distance={distance} driverInfo={driverInfo} driverID={driverID} /> 
            : (<div><form action="#" method="get">
           <div className="form-group row">
             <div className="col-md-6">

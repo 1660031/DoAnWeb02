@@ -24,7 +24,6 @@ class Header extends Component {
             </button>
       </Fragment>
       );
-
       const guestHead = (
         <Fragment>
           <a href="/login" style={{marginRight: '20px'}}>Đăng nhập</a>
