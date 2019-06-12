@@ -11,7 +11,6 @@ const multer = require('multer');
 
 var app = express();
 var server = require('http').Server(app)
-var io = require('socket.io')(server)
 var arr_pos=[];
 router.get('/users', function(req, res, next) {
   

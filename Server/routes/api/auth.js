@@ -8,7 +8,6 @@ const auth = require('../../middleware/auth');
 const validateLoginInput = require("../../validation/login");
 // Load User model
 const User = require("../../models/User");
-var io = require('socket.io')(server)
 var arr_pos=[];
 router.get('/', function(req, res, next) {
  
