@@ -3,7 +3,7 @@ import io from 'socket.io-client'
 import DriverMap from './Map/DriverMap'
 import BookingReceived from './Modals/BookingReceived'
 import Switch from './Switch'
-
+import { connect } from "react-redux";
 import { timingSafeEqual } from 'crypto';
 class Driver extends Component {
   constructor(props) {
@@ -13,11 +13,11 @@ class Driver extends Component {
       passFromLocation : null,
       passToLocation : null,
       passPhoneNumber:null,
-      id :null,
+      id : this.props.auth.sdt,
       info:{
-        name: "Ragnar Lothbrok",
-        bikeModel : "Super Dream",
-        bikeNumber :"8263",
+        name: this.props.auth.name,
+        bikeModel : this.props.auth.typeBike,
+        bikeNumber :this.props.auth.bsxe,
       },
       distance :0,
       toLocation : null,
@@ -140,4 +140,9 @@ setIsOn =() =>{
     }
 }
 
-export default Driver;
+const mapStateToProps = state => ({
+  auth: state.auth.user
+});
+export default connect(
+  mapStateToProps
+)(Driver);
