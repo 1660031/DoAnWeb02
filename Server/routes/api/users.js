@@ -8,14 +8,14 @@ const validateLoginInput = require("../../validation/login");
 const User = require("../../models/User");
 const mongoose = require("mongoose");
 const multer = require('multer');
-const path = require('path');
+//const path = require('path');
 
 
 // @route POST api/users/register
 // @desc Register user
 // @access Public
 
-const storage = multer.diskStorage({
+/* const storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, 'uploads/');
   },
@@ -47,9 +47,9 @@ function checkFileType(file, cb){
   } else {
     cb.status(400).json({ imageProduct: "Tập tin ko phải ảnh" });
   }
-}
+} */
   
-router.post("/", upload.single('imageProduct'), (req, res) => {
+router.post("/", (req, res) => {
     // Form validation
   const { errors, isValid } = validateRegisterInput(req.body);
   // Check validation
@@ -67,7 +67,7 @@ router.post("/", upload.single('imageProduct'), (req, res) => {
           password: req.body.password,
           typeBike: req.body.typeBike,
           bsxe: req.body.bsxe,
-          imageProduct: req.file.path,
+          //imageProduct: req.file.path,
           activeUser: false,
           isAdmin: false
         });

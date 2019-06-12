@@ -27,10 +27,6 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  imageProduct: { 
-    type: String, 
-    required: true 
-  },
   activeUser:{
     type: Boolean,
     default: false
