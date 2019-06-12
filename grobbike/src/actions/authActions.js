@@ -29,13 +29,12 @@ export const loginUser = (userData,setInfo) => dispatch => {
       localStorage.setItem("jwtToken", token);
       // Set token to Auth header
       setAuthToken(token);
-      setInfo("123123123");
-
+      setInfo(userData);
       // Decode token to get user data
       const decoded = jwt_decode(token);
       // Set current user
       dispatch(setCurrentUser(decoded));
-    })
+        })
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
