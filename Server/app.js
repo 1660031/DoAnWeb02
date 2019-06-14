@@ -8,7 +8,7 @@ var createError = require('http-errors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const router = require("./routes/api/users");
 
 const app = express();
 

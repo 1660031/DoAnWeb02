@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const passport = require("passport");
-const users = require(".Server/routes/api/users");
-const auth = require(".Server/routes/api/auth");
+const users = require("./Server/routes/api/users");
+const auth = require("./Server/routes/api/auth");
 var createError = require('http-errors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -24,6 +24,7 @@ app.use(
   })
 );
 
+app.use('/users', router);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -16,7 +16,7 @@ router.get('/users', function(req, res, next) {
   
 });
 
-module.exports = router;
+app.use('/users', router);
 
 //const path = require('path');
 
@@ -109,5 +109,39 @@ router.post("/", (req, res) => {
       }
     });
   });
+
+  router.get('/', function(req, res) {
+    User.find(function(err, users) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(users);
+        }
+    });
+});
+router.get('/:id', function(req, res) {
+    let id = req.params.id;
+    User.findById(id, function(err, user) {
+        res.json(user);
+    });
+});
+
+router.post('/update/:id', function(req, res) {
+  User.findById(req.params.id, function(err, user) {
+      if (!user)
+          res.status(404).send('data is not found');
+      else
+      {
+        user.sdt = req.body.sdt;
+
+        user.save().then(user => {
+              res.json('user updated');
+          })
+          .catch(err => {
+              res.status(400).send("Update fail");
+          });
+      }
+  });
+}); 
 
   module.exports = router;
