@@ -4,12 +4,34 @@ import io from 'socket.io-client'
 import DriverReceived from './Modals/DriverReceived'
 
 import * as api from './Api'
+
+function FormError(props) {
+  /* nếu isHidden = true, return null ngay từ đầu */
+  if (props.isHidden) { return null;}
+
+  return ( <div style={{marginTop:"5px",
+    color: "red",
+    fontStyle:"italic",
+    fontSize: "15px"}}>{props.errorMessage}</div>)
+}
+const validateInput = (checkingText) => {
+  const regexp = /^\d{10,11}$/;
+  const checkingResult = regexp.exec(checkingText);
+  if (checkingResult !== null) {
+      return { isInputValid: true,
+               errorMessage: ''};
+  } else {
+      return { isInputValid: false,
+               errorMessage: 'Số điện thoại phải có 10 - 11 chữ số.'};
+  }
+}
 class Passenger extends Component {
   constructor(props) {
     super(props);
     this.state = {
       phoneNumber:null,
       listSearch:null,
+      listDriver:null,
       selectedAddressIndex : null,
       fromAddress : null,
       toAddress: null,
@@ -21,23 +43,22 @@ class Passenger extends Component {
       distance:0,
       time:0,
       isComplete:null,
+      isInputValid: true, 
+      errorMessage: ''  
     }
     this.socket =io('http://localhost:5000/');
-    
+   
 }
 setDisTime = (dis,time) => {
   this.setState({distance:dis,time:time})
 }
   sendLocation = () => {
-    const {phoneNumber}=this.refs;
-    const {fromLocation,toLocation,distance}=this.state;
-    const info={id:phoneNumber.value, fromLocation:{lat : fromLocation[0], lng : fromLocation[1]},toLocation : toLocation,distance : distance};
-    this.socket.emit('passenger',info);
-    this.socket.on('list_location',(res)=>{
-      console.log(res)
-    })
+    const {phoneNumber,fromLocation,toLocation,distance}=this.state;
+    const info={id:phoneNumber, fromLocation:{lat : fromLocation[0], lng : fromLocation[1]},toLocation : toLocation,distance : distance};
+    this.socket.emit('booking',info);
+    
     var driverCame = false;
-    this.socket.on(phoneNumber.value,(res)=>{
+    this.socket.on(phoneNumber,(res)=>{
       if(res.accept){
         if(res.accept === false){
           alert("vui lòng thử lại");
@@ -94,33 +115,52 @@ setDisTime = (dis,time) => {
         fromLocation:[pos.coords.latitude,pos.coords.longitude]
        });
   });
-  // var modal = document.getElementById('driverReceived');
-  //   modal.classList.toggle('show');
-  //   modal.style.display = 'block';
+  
+  this.socket.on('list_location',(res)=>{
+    console.log(res);
+    if(res) this.setState({listDriver : res.listDriver});
+  })
+}
+handleInput = event => {
+  const { value } = event.target;
+  this.setState({value});
+}
+handleInputValidation = event => {
+  const { isInputValid, errorMessage } = validateInput(this.state.value);
+  this.setState({
+      isInputValid: isInputValid,
+      errorMessage: errorMessage
+  })
+}
+getListDriver = ()=>{
+  var interval = setInterval(()=>{
+    if(this.state.driverID) clearInterval(interval)
+    else this.socket.emit('passenger_on',{id:this.state.phoneNumber})
+  },5000);
 }
       render() {
-        const {address,phoneNumber}=this.refs;
+        const {address,inputPhoneNumber}=this.refs;
+        console.log(this.state.phoneNumber);
         const {driverInfo,driverID,distance,listSearch,fromLocation,toLocation} = this.state;
         return (
-         <div style={{padding:"20px 20px 10px 20px",background:"black"}}>
-          <div> {(driverID)  ? <DriverReceived ref="passengerModal" isComplete={this.state.isComplete} distance={distance} driverInfo={driverInfo} driverID={driverID} /> 
+         <div style={{padding:"20px 20px 10px 20px",background:"linear-gradient(90deg, rgba(112,49,73,1) 0%, rgba(73,66,147,1) 50%, rgba(0,0,4,1) 100%)",height:" 820px"}}>
+         {(this.state.phoneNumber) ? 
+         <div> {(driverID)  ? <DriverReceived ref="passengerModal" isComplete={this.state.isComplete} distance={distance} driverInfo={driverInfo} driverID={driverID} /> 
            : (<div><form action="#" method="get">
-          <div className="form-group row">
+          <div style={{marginTop: "10px"}} className="form-group row">
             <div className="col-md-6">
-              <input ref="phoneNumber" type="text" className="form-control" placeholder="Nhập số điện thoại" />
               <input ref="address" type="text" className="form-control" placeholder="Chọn trong bản đồ hoặc nhập địa chỉ cần đến" />
             </div>
             <div className="col-md-6 ml-auto">
               <div className="toggle-button align-items-center d-flex">
-              <a href="#" onClick={()=>{
-                this.setState({phoneNumber:phoneNumber.value});api.getToLocation(address.value,this.setListSearch)}}
+              <a href="#" onClick={()=>{api.getToLocation(address.value,this.setListSearch)}}
                  className="btn btn-primary py-3 px-5">Tìm kiếm</a>
               </div>
             </div>
           </div>
         </form>
         {listSearch && <ul id="listSearch">
-         { 
+         {
            listSearch.map((value,key)=><li style = {{background : this.selectedAddressBackground(key),
                                                     color:this.selectedAddressColor(key)}}
            onClick={()=>{console.log(this.props.toLocation);
@@ -131,10 +171,32 @@ setDisTime = (dis,time) => {
            key={key}>{value.display_name}</li>)
          }
           </ul>}
-          {toLocation && <a href="#" onClick={()=>{this.sendLocation()}} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#book">Đặt xe</a>}
+          {toLocation && <a href="#" onClick={()=>{this.sendLocation()}} style={{marginBottom:"20px"}} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#book">Đặt xe</a>}
           </div>) }
+          <PassMap listDriver={this.state.listDriver} driverLocation={this.state.driverLocation} setDisTime={this.setDisTime} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/> 
+          </div> :
+          <div  className="row" style={{position:"relative",width:"50%",top:"25%",left:"25%",padding:"20px 20px 10px 20px"}}>
+          <div className="col-md-8">
+          <input 
+          onChange={this.handleInput}
+          onBlur={this.handleInputValidation}
+          style={{width:"100%"}} ref="inputPhoneNumber" type="text" className="form-control" placeholder="Nhập số điện thoại để bắt đầu đặt xe" />
+          <FormError
+          isHidden={this.state.isInputValid} 
+          errorMessage={this.state.errorMessage} />
           </div>
-           <PassMap driverLocation={this.state.driverLocation} setDisTime={this.setDisTime} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/>
+          <div className="col-md-4">
+              <div className="toggle-button align-items-center d-flex">
+              <a onClick={()=>{
+                if(this.state.isInputValid === true)
+                {setTimeout(()=>this.getListDriver(),3000);
+                this.setState({phoneNumber:inputPhoneNumber.value});
+              }
+              }}
+                 className="btn btn-primary py-3 px-5">Bắt đầu</a>
+              </div>
+            </div>
+          </div>}
            </div>
         );
     }

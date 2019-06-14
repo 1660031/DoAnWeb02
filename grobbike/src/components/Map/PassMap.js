@@ -12,7 +12,6 @@ class PassMap extends React.Component {
     this.state = {
       isMapInit: false,
       route:null,
-      listDriver : null,
     }
     this.setRoute = this.setRoute.bind(this);
   }
@@ -46,11 +45,12 @@ componentDidMount(){
     iconSize:[25, 41], // size of the icon
     iconAnchor:   [12, 50],
   });
-    const {driverLocation,toLocation,fromLocation,setDisTime,} = this.props;
+    const {listDriver,driverLocation,toLocation,fromLocation,setDisTime,} = this.props;
     console.log(this.props.driverCame);
-    console.log("driver location : ");
     console.log(driverLocation);
-    const {listDriver,isMapInit} = this.state;
+    console.log(this.props.listDriver);
+
+    const {isMapInit} = this.state;
     console.log(fromLocation);
     console.log(toLocation);
     return (
@@ -77,7 +77,7 @@ componentDidMount(){
           </Popup>
     </Marker>}        
         {(listDriver) && listDriver.map((value,key)=>
-            <Marker position={toLocation}>
+            <Marker icon={driverIcon} position={[value.lat,value.lng]}>
             <Popup>
               Popup for any custom information.
             </Popup>
