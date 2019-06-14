@@ -17,6 +17,9 @@ componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/driver"); // push user to dashboard when they login
     }
+    if(nextProps.auth.isAuthenticated && nextProps.auth.user.activeUser ){
+      this.props.history.push("/admin");
+    }
 if (nextProps.errors) {
       this.setState({
         errors: nextProps.errors
@@ -27,7 +30,7 @@ if (nextProps.errors) {
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/");
+      this.props.history.push("/driver");
     }
   }
 
