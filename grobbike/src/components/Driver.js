@@ -111,6 +111,13 @@ class Driver extends Component {
     else this.setState({toLocation: location});
   }
   componentDidMount() {
+    if (!this.props.auth.isAuthenticated) {
+      this.props.history.push("/");
+  }
+  if (this.props.auth.isAuthenticated) {
+    this.props.history.push("/driver");
+ 
+  }
     const {id} = this.state;
 
     window.onbeforeunload=this.socket.emit('driver_on',{id :id,location:null});
@@ -141,7 +148,8 @@ stopDriving =() =>{
 }
 
 const mapStateToProps = state => ({
-  info: state.auth.user
+  info: state.auth.user,
+  auth: state.auth
 });
 export default connect(
   mapStateToProps

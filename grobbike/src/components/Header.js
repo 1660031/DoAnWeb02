@@ -8,22 +8,27 @@ class Header extends Component {
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
+    window.location.href = "/";
   };
     render() {
       const { isAuthenticated, user } = this.props.auth;
 
       const loginHead = (
         <Fragment>
+          
           <span>
             <strong style={{marginRight: '20px'}} >{user ? `Chào ${user.name}` : ''}</strong>
           </span>
+          {this.props.auth.user.isAdmin ?
+          <a href="/admin"  style={{marginRight: '20px'}}>Quản lý</a> : ''}
           <button
               onClick={this.onLogoutClick}
               className="btn btn-primary">
               Logout
             </button>
-      </Fragment>
+        </Fragment>
       );
+      
       const guestHead = (
         <Fragment>
           <a href="/login" style={{marginRight: '20px'}}>Đăng nhập</a>
