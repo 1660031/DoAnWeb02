@@ -168,7 +168,7 @@ io.on('connection',(socket=>{
         })
     socket.on('driver_on',(info)=>
         {
-          console.log(info);
+          console.log(info.info);
             var isExist = false;
             listDriver.forEach((element,index,arr) => {
               if(element.id === info.id)
