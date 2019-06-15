@@ -111,7 +111,7 @@ setDisTime = (dis,time) => {
   componentDidMount() {
     navigator.geolocation.watchPosition((pos)=>{
       this.setState({
-        // toLocation:[pos.coords.latitude,pos.coords.longitude],
+        toLocation:[pos.coords.latitude,pos.coords.longitude],
         fromLocation:[pos.coords.latitude,pos.coords.longitude]
        });
   });
@@ -143,7 +143,7 @@ getListDriver = ()=>{
         console.log(this.state.phoneNumber);
         const {driverInfo,driverID,distance,listSearch,fromLocation,toLocation} = this.state;
         return (
-         <div style={{padding:"20px 20px 10px 20px",background:"linear-gradient(90deg, rgba(112,49,73,1) 0%, rgba(73,66,147,1) 50%, rgba(0,0,4,1) 100%)",height:" 820px"}}>
+         <div style={{padding:"20px 20px 10px 20px",background:"linear-gradient(90deg, rgba(112,49,73,1) 0%, rgba(73,66,147,1) 50%, rgba(0,0,4,1) 100%)",height:"1120px"}}>
          {(this.state.phoneNumber) ? 
          <div> {(driverID)  ? <DriverReceived ref="passengerModal" isComplete={this.state.isComplete} distance={distance} driverInfo={driverInfo} driverID={driverID} /> 
            : (<div><form action="#" method="get">
@@ -153,7 +153,7 @@ getListDriver = ()=>{
             </div>
             <div className="col-md-6 ml-auto">
               <div className="toggle-button align-items-center d-flex">
-              <a href="#" onClick={()=>{api.getToLocation(address.value,this.setListSearch)}}
+              <a href="#" onClick={()=>{api.getToLocation(this.refs.address.value,this.setListSearch)}}
                  className="btn btn-primary py-3 px-5">Tìm kiếm</a>
               </div>
             </div>
@@ -171,7 +171,7 @@ getListDriver = ()=>{
            key={key}>{value.display_name}</li>)
          }
           </ul>}
-          {toLocation && <a href="#" onClick={()=>{this.sendLocation()}} style={{marginBottom:"20px"}} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#book">Đặt xe</a>}
+          {toLocation && toLocation[0] !==fromLocation[0] && toLocation[1] !==fromLocation[1] && <a href="#" onClick={()=>{this.sendLocation()}} style={{marginBottom:"20px"}} className="btn btn-primary py-3 px-5" data-toggle="modal" data-target="#book">Đặt xe</a>}
           </div>) }
           <PassMap listDriver={this.state.listDriver} driverLocation={this.state.driverLocation} setDisTime={this.setDisTime} toLocation={this.state.toLocation} setToLocation={this.setToLocation} fromLocation={this.state.fromLocation}/> 
           </div> :

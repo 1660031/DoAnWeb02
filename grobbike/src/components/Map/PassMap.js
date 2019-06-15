@@ -58,8 +58,8 @@ componentDidMount(){
         ref={this.saveMap}
         center={fromLocation}
         zoom={13}
-        minZoom={13}
-        maxZoom={13}
+        // minZoom={13}
+        // maxZoom={13}
 
         onClick={this.addToMarker}
       >
@@ -82,7 +82,7 @@ componentDidMount(){
               Popup for any custom information.
             </Popup>
         </Marker>)}
-        {(toLocation) && <Marker icon={desIcon} position={toLocation}>
+        {(toLocation) &&  toLocation[0] !==fromLocation[0] && toLocation[1] !==fromLocation[1]&& <Marker icon={desIcon} position={this.props.toLocation}>
           <Popup>
           Vị trí đến
           </Popup>

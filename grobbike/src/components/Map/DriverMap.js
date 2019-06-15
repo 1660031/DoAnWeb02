@@ -50,8 +50,8 @@ saveMap = (map) => {
         ref={this.saveMap}
         center={center}
         zoom={13}
-        minZoom={13}
-        maxZoom={13}
+        // minZoom={13}
+        // maxZoom={13}
         onClick={this.addToMarker}
       >
         <TileLayer

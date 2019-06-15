@@ -57,8 +57,8 @@ class HomePage extends Component {
                 render={(props) => <Login {...props} setInfo={this.setInfo} />} 
                 />
               <Route path="/signup" exact component={Signup} />
-              <Route path="/admin" exact component={Admin} />
-              <Route path="/admin/edit/:id" exact component={AdminEdit} />
+              {/* <Route path="/admin" exact component={Admin} />
+              <Route path="/admin/edit/:id" exact component={AdminEdit} /> */}
               
               <Switch>
                 <PrivateRoute exact path="/Header" component={Header} />
