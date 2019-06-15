@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
-
+app.use('/users', router);
 
   app.use(function(err, req, res, next) {
     // set locals, only providing error in development
@@ -53,10 +53,10 @@ app.use("/api/auth", require("./routes/api/auth"));
 
 
 
-app.use(express.static(__dirname + "/grobbike"));
+/* app.use(express.static(__dirname + "/grobbike"));
 
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'grobbike', 'build', 'index.js'));
-  });
+  }); */
   
   module.exports = app;

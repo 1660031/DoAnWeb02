@@ -12,11 +12,8 @@ const multer = require('multer');
 var app = express();
 var server = require('http').Server(app)
 var arr_pos=[];
-router.get('/users', function(req, res, next) {
-  
-});
 
-app.use('/users', router);
+
 
 //const path = require('path');
 
@@ -120,28 +117,28 @@ router.post("/", (req, res) => {
     });
 });
 router.get('/:id', function(req, res) {
-    let id = req.params.id;
-    User.findById(id, function(err, user) {
-        res.json(user);
-    });
+  let sdt = req.params.sdt;
+  User.findById(req.params.id).then(user => {
+      res.json(user);
+  });
 });
 
 router.post('/update/:id', function(req, res) {
-  User.findById(req.params.id, function(err, user) {
-      if (!user)
-          res.status(404).send('data is not found');
-      else
-      {
-        user.sdt = req.body.sdt;
-
-        user.save().then(user => {
-              res.json('user updated');
-          })
-          .catch(err => {
-              res.status(400).send("Update fail");
-          });
-      }
-  });
-}); 
-
+User.findById(req.params.id).then(user =>{
+    if (!user)
+        res.status(404).send('data is not found');
+    else
+    {
+      user.activeUser = req.body.activeUser,
+      user.isAdmin = req.body.isAdmin,
+      user.save().then(user => {
+            res.json('user updated');
+        })
+        .catch(err => {
+            res.status(400).send("Update fail");
+        });
+    }
+});
+});
+app.use('/users', router);
   module.exports = router;
