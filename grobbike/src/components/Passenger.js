@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PassMap from './Map/PassMap'
 import io from 'socket.io-client'
 import DriverReceived from './Modals/DriverReceived'
-
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { logoutUser } from "../actions/authActions";
 import * as api from './Api'
 
 function FormError(props) {
@@ -109,6 +111,12 @@ setDisTime = (dis,time) => {
     else this.setState({toLocation: location});
   }
   componentDidMount() {
+    if (!this.props.auth.isAuthenticated) {
+      this.props.history.push("/");
+  }
+  if(!this.props.auth.user.isAdmin && this.props.auth.isAuthenticated){
+  this.props.history.push("/driver");
+  }
     navigator.geolocation.watchPosition((pos)=>{
       this.setState({
         toLocation:[pos.coords.latitude,pos.coords.longitude],
@@ -202,4 +210,11 @@ getListDriver = ()=>{
     }
 }
 
-export default Passenger;
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(Passenger);

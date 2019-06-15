@@ -7,14 +7,13 @@ import { logoutUser } from "../actions/authActions";
 
 const User = props => (
     <tr>
-        <td style={{ display:"none" }}>{props.user.id}</td>
         <td>{props.user.sdt}</td>
         <td>{props.user.name}</td>
         <td>{props.user.gender}</td>
         <td>{props.user.typeBike}</td>
         <td>{props.user.bsxe}</td>
         <td>
-            <Link to={"/edit/"+props.user.id}>Sửa</Link>
+            <Link to={"/admin/edit/"+props.user._id}>Sửa</Link>
         </td>
     </tr>
 )
@@ -32,7 +31,7 @@ class Admin extends Component {
         if(!this.props.auth.user.isAdmin && this.props.auth.isAuthenticated){
         this.props.history.push("/driver");
         }
-        axios.get('users/')
+        axios.get('users')
             .then(res => {
                 this.setState({users: res.data});
             })
@@ -42,7 +41,8 @@ class Admin extends Component {
     }   
 
     componentDidUpdate() {
-        axios.get('users/')
+        
+        axios.get('users')
         .then(res => {
             this.setState({users: res.data});
         })
