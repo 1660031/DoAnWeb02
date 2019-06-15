@@ -84,7 +84,8 @@ class Driver extends Component {
 
     var interval = setInterval(()=>{
       console.log(this.state.isOn)
-      if(this.state.isOn === false) clearInterval(interval);
+      if(this.state.isOn === false) {
+        clearInterval(interval);}
       this.socket.emit('driver_on',{id : id,location:this.state.toLocation,info : info})},3000);
     // setInterval(()=>this.socket.emit('driver_on',{id :"driver001" ,location:{lat : location[0],lng : location[1]}}),10000);
     this.socket.on(id ,(info)=>{
@@ -100,7 +101,6 @@ class Driver extends Component {
           modal.classList.add('show');
           modal.style.display = 'block';
           driverModal.startCountDown();
-          
           },1000);
 
     })
@@ -130,7 +130,7 @@ class Driver extends Component {
 stopDriving =() =>{
   const {id} = this.state;
   this.setState({isOn:false});
-  setTimeout(()=>this.socket.emit('driver_on',{id :id,location:null}));
+  setTimeout(()=>this.socket.emit('driver_on',{id :id,location:null}),3500);
 
 }
     render() {
